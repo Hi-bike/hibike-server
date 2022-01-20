@@ -82,7 +82,7 @@ MAIL_SERVER = "smtp.gmail.com"
 CDN_URL = {cdn_url ex)http://127.0.0.1}
 MAIL_PORT = 465
 MAIL_USERNAME = "lmwljw96@gmail.com"
-MAIL_PASSWORD = "9698mwjw!@"
+MAIL_PASSWORD = ""
 MAIL_USE_TLS = False
 MAIL_USE_SSL = True
 MAIL_AUTH_LINK = "http://127.0.0.1/api/auth/check-emailauth?jwt="
