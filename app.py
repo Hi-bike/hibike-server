@@ -1,0 +1,1 @@
+from scrimdor import app as application
