@@ -3,17 +3,13 @@ from marshmallow import fields, Schema
 
 # Requests
 class RequestSignupSchema(Schema):
-      email = fields.Str(description="유저 아이디", required=True)
+      id = fields.Str(description="유저 아이디", required=True)
       password = fields.Str(description="비밀번호", required=True)
-      birth = fields.Str(description="생년월일", required=True)
-      gender = fields.Str(description="성별", required=True)
       nickname = fields.Str(description="닉네임", required=True)
 
 class RequestSigninSchema(Schema):
-      email = fields.Str(description="유저 아이디", required=True)
+      id = fields.Str(description="유저 아이디", required=True)
       password = fields.Str(description="비밀번호", required=True)
-      remember_check = fields.Int(description="remember me?", required=True)
-
 
 class RequestResetPasswordSchema(Schema):
       newpw = fields.Str(description="새비밀번호", required=True)
@@ -32,11 +28,6 @@ class RequestByEmailSchema(Schema):
 #   # profile_image_url = fields.Str(required=False)
 #   #file = fields.Raw(required=False, type="file")
 #   introduction = fields.Str(description="자기소개", required=False)
-
-class RequestSigninSchema(Schema):
-      email = fields.Str(description="이메일", required=True)
-      password = fields.Str(description="비밀번호", required=True)
-      remember_check = fields.Int(description="remember me?", required=True)
 
 class RequestSendAuthCodeSchema(Schema):
       phone_number = fields.Str(description="휴대폰번호", required=True)

@@ -61,9 +61,7 @@ cdn.set_cdn_url(app.config['CDN_URL'], docker=True)
 mail = Mail(app)
 
 from scrimdor.controllers.auth import auth_bp
-from scrimdor.controllers.admin import admin_bp
 app.register_blueprint(auth_bp)
-app.register_blueprint(admin_bp)
 
 docs.register_existing_resources()
 # 스웨거에서 options 제거
