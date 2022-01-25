@@ -2,6 +2,9 @@ from marshmallow import fields, Schema
 
 
 # Requests
+class RequestTestSchema(Schema):
+      text = fields.Str(description="텍스트", required=True)
+
 class RequestSignupSchema(Schema):
       id = fields.Str(description="유저 아이디", required=True)
       password = fields.Str(description="비밀번호", required=True)

@@ -11,9 +11,27 @@ from scrimdor.controllers.auth import (
     auth_bp,
     authorization_header
 )
+from scrimdor.schema.user import (
+    RequestTestSchema,
+)
 from scrimdor.utils.common import (
     response_json_with_code,
 )
+
+@auth_bp.route('/test', methods=["POST"])
+@use_kwargs(RequestTestSchema)
+@doc(
+    tags=[API_CATEGORY],
+    summary="회원가입",
+    description="회원가입을 합니다.",
+    responses={200: {"description" : "success response"},
+               401: {"description" : "Unauthorized"},
+    }
+)
+def test_api(text):
+    return response_json_with_code(
+        result = text + 'from server'
+    )
 
 @auth_bp.route("/current-user", methods=["GET"])
 @jwt_required(locations="headers")
