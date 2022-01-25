@@ -22,15 +22,15 @@ from scrimdor.utils.common import (
 @use_kwargs(RequestTestSchema)
 @doc(
     tags=[API_CATEGORY],
-    summary="회원가입",
-    description="회원가입을 합니다.",
+    summary="테스트용 api",
+    description="테스트용 api",
     responses={200: {"description" : "success response"},
                401: {"description" : "Unauthorized"},
     }
 )
 def test_api(text):
     return response_json_with_code(
-        result = text + 'from server'
+        result = text + ' from server'
     )
 
 @auth_bp.route("/current-user", methods=["GET"])
