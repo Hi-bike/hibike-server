@@ -7,7 +7,7 @@ class User(db.Model):
     id = db.Column(db.String(30), nullable=False)
     password = db.Column(db.String(150), nullable=False)
     nickname = db.Column(db.String(30), nullable=False)
-    fcm_token = db.Column(db.String(150), nullable=True)
+    fcm_token = db.Column(db.String(300), nullable=True)
 
     @staticmethod
     def get_user_by_id(id):
