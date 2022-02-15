@@ -1,21 +1,21 @@
 from flask import render_template
 from flask_apispec import doc, use_kwargs
 from flask_mail import Message
-from scrimdor.models.auth import User,UserRiding
-from scrimdor.models.common.redis_conn import RedisConn
-from scrimdor import db
-from scrimdor.controllers.auth import (
+from hibike.models.auth import User,UserRiding
+from hibike.models.common.redis_conn import RedisConn
+from hibike import db
+from hibike.controllers.auth import (
     API_CATEGORY,
     auth_bp
 )
-from scrimdor.schema.user import (
+from hibike.schema.user import (
     RequestSignupSchema,
 )
-from scrimdor.utils.common import (
+from hibike.utils.common import (
     response_json_with_code,
     gen_unique_id
 )   
-from scrimdor.utils.jwt import JwtToken
+from hibike.utils.jwt import JwtToken
 import base64
 import hashlib
 import hmac

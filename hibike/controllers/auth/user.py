@@ -4,17 +4,17 @@ from flask_jwt_extended import (
     jwt_required,
     get_jwt_identity,
 )
-from scrimdor.models.auth import User, UserRiding
-from scrimdor.models.common.redis_conn import RedisConn
-from scrimdor.controllers.auth import (
+from hibike.models.auth import User, UserRiding
+from hibike.models.common.redis_conn import RedisConn
+from hibike.controllers.auth import (
     API_CATEGORY,
     auth_bp,
     authorization_header
 )
-from scrimdor.schema.user import (
+from hibike.schema.user import (
     RequestTestSchema,
 )
-from scrimdor.utils.common import (
+from hibike.utils.common import (
     response_json_with_code,
 )
 

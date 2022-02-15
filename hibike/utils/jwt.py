@@ -1,5 +1,5 @@
-from scrimdor import jwt
-from scrimdor.models.common.redis_conn import RedisConn
+from hibike import jwt
+from hibike.models.common.redis_conn import RedisConn
 from flask_jwt_extended import (
     create_access_token, create_refresh_token
 )

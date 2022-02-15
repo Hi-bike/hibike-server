@@ -21,12 +21,12 @@ app = Flask(__name__)
 base_dir = os.getcwd()
 sys.path.append(base_dir)
 try:
-    app.config.from_pyfile(f"{base_dir}/scrimdor/default.cfg")
+    app.config.from_pyfile(f"{base_dir}/hibike/default.cfg")
 except FileNotFoundError:
-    f = open(f"{base_dir}/scrimdor/default.cfg", "w")
+    f = open(f"{base_dir}/hibike/default.cfg", "w")
     f.write(inspect.cleandoc("""
         SECRET_KEY="default_secret_key"
-        SQLALCHEMY_DATABASE_URI="mariadb+pymysql://root:backstart@db:3306/scrimdor?charset=utf8"
+        SQLALCHEMY_DATABASE_URI="mariadb+pymysql://root:backstart@db:3306/hibike?charset=utf8"
         JWT_SECRET_KEY="default_jwt_secret_key"
         JWT_ACCESS_TOKEN_EXPIRES=180
         """))
@@ -36,7 +36,7 @@ app.config['JSON_SORT_KEYS'] = False
 app.config['JSON_AS_ASCII'] = False
 app.config.update({
     "APISPEC_SPEC": APISpec(
-        title="scrimdor api",
+        title="hibike api",
         version="v1",
         openapi_version="2.0.0",
         plugins=[MarshmallowPlugin()],
@@ -49,18 +49,18 @@ docs = FlaskApiSpec(app)
 jwt = JWTManager(app)
 mongo = PyMongo(app)
 
-from scrimdor.models import *
+from hibike.models import *
 db.init_app(app)
 migrate.init_app(app, db)
 
-from scrimdor.models.common.cdn import CDN
+from hibike.models.common.cdn import CDN
 cdn = CDN()
 # 도커환경에서 작업할 경우: docker=True
 cdn.set_cdn_url(app.config['CDN_URL'], docker=True)
 
 mail = Mail(app)
 
-from scrimdor.controllers.auth import auth_bp
+from hibike.controllers.auth import auth_bp
 app.register_blueprint(auth_bp)
 
 docs.register_existing_resources()
