@@ -26,6 +26,8 @@ from scrimdor.utils.jwt import (
 )
 import bcrypt
 import datetime
+import requests
+import json
 
 @auth_bp.route('/signin', methods=["POST"])
 @use_kwargs(RequestSigninSchema)
@@ -47,9 +49,19 @@ def login(id, password, fcm_token):
     if bcrypt.checkpw(password.encode('utf-8'), user_row.password.encode('utf-8')):
         user_row.fcm_token = fcm_token
         db.session.commit()
-        
+
         token = JwtToken(user_row.idx)
         resp = response_json_with_code(access_token=token.access_token)
+        headers = {'Content-Type': 'application/json; chearset=utf-8','Authorization':'key=AAAAgdsrYfY:APA91bFPnAbWgVS2NITYanribOeuBkTbB715mTGQzLNjo9W9waNmEjqMYOzzjbwbJilmla-6oA09qnddeIWAUpT_EUte9KJ5vHsBl4tM-jA-OLB29KjoS7vyeaFKL6c0MGfk7wRb7ksQ'} 
+        dict = {
+            'to' : fcm_token, 
+            'priority' : 'high', 
+            'data' : {
+                'title' : '로그인 알림',
+                'message' : user_row.nickname + '님 환영합니다.'
+            }
+        } 
+        res = requests.post('https://fcm.googleapis.com/fcm/send', data=json.dumps(dict), headers=headers)
         return resp
     else:
         return response_json_with_code(
