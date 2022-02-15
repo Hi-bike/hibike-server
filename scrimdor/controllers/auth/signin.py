@@ -37,7 +37,7 @@ import datetime
                401: {"description" : "Unauthorized"},
     }
 )
-def login(id, password):
+def login(id, password, fcm_token):
     user_row = User.get_user_by_id(id)
     if user_row is None:
         return response_json_with_code(
@@ -45,6 +45,9 @@ def login(id, password):
             result="There is no ID on db."
         )
     if bcrypt.checkpw(password.encode('utf-8'), user_row.password.encode('utf-8')):
+        user_row.fcm_token = fcm_token
+        db.session.commit()
+        
         token = JwtToken(user_row.idx)
         resp = response_json_with_code(access_token=token.access_token)
         return resp
