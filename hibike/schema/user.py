@@ -13,6 +13,7 @@ class RequestSignupSchema(Schema):
 class RequestSigninSchema(Schema):
       id = fields.Str(description="유저 아이디", required=True)
       password = fields.Str(description="비밀번호", required=True)
+      fcm_token = fields.Str(description="fcm 토큰", required=True)
 
 class RequestResetPasswordSchema(Schema):
       newpw = fields.Str(description="새비밀번호", required=True)
