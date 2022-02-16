@@ -5,6 +5,10 @@ from marshmallow import fields, Schema
 class RequestTestSchema(Schema):
       text = fields.Str(description="텍스트", required=True)
 
+class RequestSetNicknameSchema(Schema):
+      nickname = fields.Str(description="닉네임", required=True)
+      id = fields.Str(description="유저 아이디", required=True)
+
 class RequestSignupSchema(Schema):
       id = fields.Str(description="유저 아이디", required=True)
       password = fields.Str(description="비밀번호", required=True)

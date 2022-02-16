@@ -1,4 +1,3 @@
-from flask import render_template
 from flask_apispec import doc, use_kwargs
 from flask_mail import Message
 from hibike.models.auth import User,UserRiding
@@ -13,13 +12,7 @@ from hibike.schema.user import (
 )
 from hibike.utils.common import (
     response_json_with_code,
-    gen_unique_id
 )   
-from hibike.utils.jwt import JwtToken
-import base64
-import hashlib
-import hmac
-import random
 import bcrypt
 
 def is_empty(email, password, birth, gender, nickname):

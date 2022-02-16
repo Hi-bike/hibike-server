@@ -1,9 +1,5 @@
-from flask import request
+from flask import request, session, jsonify
 from flask_apispec import doc, use_kwargs
-from flask_jwt_extended import (
-    jwt_required,
-    get_jwt_identity,
-)
 from hibike.models.auth import User, UserRiding
 from hibike.models.common.redis_conn import RedisConn
 from hibike.controllers.auth import (
@@ -13,10 +9,12 @@ from hibike.controllers.auth import (
 )
 from hibike.schema.user import (
     RequestTestSchema,
+    RequestSetNicknameSchema,
 )
 from hibike.utils.common import (
     response_json_with_code,
 )
+from hibike import db
 
 @auth_bp.route('/test', methods=["POST"])
 @use_kwargs(RequestTestSchema)
@@ -34,7 +32,6 @@ def test_api(text):
     )
 
 @auth_bp.route("/current-user", methods=["GET"])
-@jwt_required(locations="headers")
 @doc(
     tags=[API_CATEGORY],
     summary="현재 로그인 한 유저의 정보",
@@ -46,19 +43,43 @@ def test_api(text):
     }
 )
 def get_current_user():
-    user_idx = get_jwt_identity()
-    user_row = User.get_user_by_idx(user_idx)
+    id = request.args.get("id")
+   
+    user_row = User.get_user_by_id(id)
     if user_row:
         user_dict = user_row.to_dict()
         
-        return response_json_with_code(
-            user = user_dict
-        )
+        return user_dict
     else:
         return response_json_with_code(
             404,
             result="not found"    
         )
+
+
+@auth_bp.route("/setting-nickname", methods=["POST"])
+@use_kwargs(RequestSetNicknameSchema)
+@doc(
+    tags=[API_CATEGORY],
+    summary="닉네임 변경",
+    description="닉네임 변경",
+    params=authorization_header,
+    response={
+        200: {"description" : "success response"},
+        404: {"description" : "Not Found"}
+    }
+)
+def set_nickname(id, nickname):
+    user_row = User.get_user_by_id(id)
+    if user_row:
+        user_row.nickname = nickname
+        db.session.commit()
+        return {
+            "id":id,
+            "nickname":nickname
+        }
+    else:
+        return response_json_with_code(404)
 
 @auth_bp.route("/profile/<id>", methods=["GET"])
 @doc(

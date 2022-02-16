@@ -7,7 +7,6 @@ from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from flask import Flask  # Falsk 2.0.0부터는 FlaskApiSpec이 동작하지 않는다. v1.1.4를 사용했다.
 from flask_apispec.extension import FlaskApiSpec
-from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_pymongo import PyMongo
@@ -46,7 +45,6 @@ app.config.update({
 })
 CORS(app, supports_credentials=True)
 docs = FlaskApiSpec(app)
-jwt = JWTManager(app)
 mongo = PyMongo(app)
 
 from hibike.models import *
