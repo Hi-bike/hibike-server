@@ -9,7 +9,6 @@ from flask import Flask  # Falsk 2.0.0부터는 FlaskApiSpec이 동작하지 않
 from flask_apispec.extension import FlaskApiSpec
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from flask_pymongo import PyMongo
 from flask_cors import CORS
 from flask_mail import Mail
 
@@ -45,7 +44,6 @@ app.config.update({
 })
 CORS(app, supports_credentials=True)
 docs = FlaskApiSpec(app)
-mongo = PyMongo(app)
 
 from hibike.models import *
 db.init_app(app)

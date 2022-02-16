@@ -62,7 +62,8 @@ def signup(id, password, nickname):
             result='이미 존재하는 아이디'
         )
     return response_json_with_code(
-        200
+        200,
+        result = 'success'
     )
     
     

@@ -17,7 +17,10 @@ import bcrypt
 import requests
 import json
 
-headers = {'Content-Type': 'application/json; chearset=utf-8','Authorization':'key=AAAAgdsrYfY:APA91bFPnAbWgVS2NITYanribOeuBkTbB715mTGQzLNjo9W9waNmEjqMYOzzjbwbJilmla-6oA09qnddeIWAUpT_EUte9KJ5vHsBl4tM-jA-OLB29KjoS7vyeaFKL6c0MGfk7wRb7ksQ'}
+headers = {
+    'Content-Type': 'application/json; chearset=utf-8',
+    'Authorization':'key=AAAAgdsrYfY:APA91bFPnAbWgVS2NITYanribOeuBkTbB715mTGQzLNjo9W9waNmEjqMYOzzjbwbJilmla-6oA09qnddeIWAUpT_EUte9KJ5vHsBl4tM-jA-OLB29KjoS7vyeaFKL6c0MGfk7wRb7ksQ'
+    }
 
 @auth_bp.route('/signin', methods=["POST"])
 @use_kwargs(RequestSigninSchema)
