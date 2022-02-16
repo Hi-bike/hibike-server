@@ -3,8 +3,8 @@ import requests
 from furl import furl
 from io import BufferedReader
 from werkzeug.datastructures import FileStorage
-from scrimdor import app
-from scrimdor.utils.common import check_mime_type
+from hibike import app
+from hibike.utils.common import check_mime_type
 
 
 class CDN():

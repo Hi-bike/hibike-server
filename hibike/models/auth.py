@@ -1,4 +1,4 @@
-from scrimdor import db, app
+from hibike import db, app
 
 class User(db.Model):
     __tablename__ = "user"

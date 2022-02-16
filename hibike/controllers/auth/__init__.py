@@ -18,6 +18,6 @@ authorization_header = {
     }
 }
 
-from scrimdor.controllers.auth.signin import *
-from scrimdor.controllers.auth.signup import *
-from scrimdor.controllers.auth.user import *
+from hibike.controllers.auth.signin import *
+from hibike.controllers.auth.signup import *
+from hibike.controllers.auth.user import *

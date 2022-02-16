@@ -1,31 +1,19 @@
-from flask import request, jsonify
+from flask import request, session
 from flask_apispec import doc, use_kwargs
-from flask_jwt_extended import (
-    create_access_token,
-    jwt_required,
-    get_jwt_identity,
-    decode_token
-)
-from scrimdor import app, db
-from scrimdor.models.auth import User
-from scrimdor.models.common.redis_conn import RedisConn
-from scrimdor.controllers.auth import (
+from hibike import app, db
+from hibike.models.auth import User
+from hibike.models.common.redis_conn import RedisConn
+from hibike.controllers.auth import (
     API_CATEGORY,
-    auth_bp,
-    authorization_header
+    auth_bp
 )
-from scrimdor.schema.user import (
+from hibike.schema.user import (
     RequestSigninSchema,
 )
-from scrimdor.utils.common import (
+from hibike.utils.common import (
     response_json_with_code,
 )
-from scrimdor.utils.jwt import (
-    jwt_redis_blocklist,
-    JwtToken
-)
 import bcrypt
-import datetime
 import requests
 import json
 
@@ -54,10 +42,10 @@ def login(id, password, fcm_token):
     if bcrypt.checkpw(password.encode('utf-8'), user_row.password.encode('utf-8')):
         user_row.fcm_token = fcm_token
         db.session.commit()
-
-        token = JwtToken(user_row.idx)
-        resp = response_json_with_code(access_token=token.access_token)
-         
+        
+        r = RedisConn()
+        r.set(id,"login")
+        
         dict = {
             'to' : fcm_token, 
             'priority' : 'high', 
@@ -67,18 +55,28 @@ def login(id, password, fcm_token):
             }
         } 
         res = requests.post('https://fcm.googleapis.com/fcm/send', data=json.dumps(dict), headers=headers)
-        return resp
+        return response_json_with_code(200)
     else:
-        dict = {
-            'to' : fcm_token, 
-            'priority' : 'high', 
-            'data' : {
-                'title' : '로그인 실패알림',
-                'message' : '로그인 정보가 일치하지 않습니다.'
-            }
-        } 
-        res = requests.post('https://fcm.googleapis.com/fcm/send', data=json.dumps(dict), headers=headers)
         return response_json_with_code(
             401, 
             result="Failed"
-        )
+        )   
+        
+        
+@auth_bp.route('/signout')
+@doc(
+    tags=[API_CATEGORY],
+    summary="로그아웃",
+    description="로그아웃을 합니다.",
+    responses={200: {"description" : "success response"},
+               401: {"description" : "Unauthorized"},
+    }
+)
+def signout():
+    id = request.args.get("id")
+    r = RedisConn()
+    if r.get(id):
+        r.delete(id)
+
+    return {"result":"success"}
+        
