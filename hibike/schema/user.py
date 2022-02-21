@@ -27,15 +27,11 @@ class RequestCheckPasswordSchema(Schema):
 
 
 class RequestFileSchema(Schema):
+      id = fields.Str(description="유저 아이디", required=True)
       file = fields.Raw(required=True, type="file")
 
 class RequestByEmailSchema(Schema):
       email = fields.Str(description="이메일", required=True)
-# class RequestAccuontSettingSchema(Schema):
-#   nickname = fields.Str(description="프로플 설정할 닉네임", required=False)
-#   # profile_image_url = fields.Str(required=False)
-#   #file = fields.Raw(required=False, type="file")
-#   introduction = fields.Str(description="자기소개", required=False)
 
 class RequestSendAuthCodeSchema(Schema):
       phone_number = fields.Str(description="휴대폰번호", required=True)

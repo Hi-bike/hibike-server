@@ -1,4 +1,4 @@
-from flask import request, session, jsonify
+from flask import request, session, jsonify, send_from_directory
 from flask_apispec import doc, use_kwargs
 from hibike.models.auth import User, UserRiding
 from hibike.models.common.redis_conn import RedisConn
@@ -10,11 +10,16 @@ from hibike.controllers.auth import (
 from hibike.schema.user import (
     RequestTestSchema,
     RequestSetNicknameSchema,
+    RequestFileSchema,
 )
 from hibike.utils.common import (
     response_json_with_code,
 )
 from hibike import db
+import os
+
+
+path = os.path.abspath("./hibike/static/image/profile")
 
 @auth_bp.route('/test', methods=["POST"])
 @use_kwargs(RequestTestSchema)
@@ -57,7 +62,7 @@ def get_current_user():
         )
 
 
-@auth_bp.route("/setting-nickname", methods=["POST"])
+@auth_bp.route("/setting", methods=["POST"])
 @use_kwargs(RequestSetNicknameSchema)
 @doc(
     tags=[API_CATEGORY],
@@ -74,12 +79,10 @@ def set_nickname(id, nickname):
     if user_row:
         user_row.nickname = nickname
         db.session.commit()
-        return {
-            "id":id,
-            "nickname":nickname
-        }
+        return response_json_with_code()
     else:
         return response_json_with_code(404)
+    
 
 @auth_bp.route("/profile/<id>", methods=["GET"])
 @doc(
@@ -109,3 +112,47 @@ def get_user_profile(id):
             result="not found"    
         )
             
+
+@auth_bp.route("/image", methods=["POST"])
+@doc(
+    tags=[API_CATEGORY],
+    summary="유저의 프로필 이미지",
+    description="유저의 프로필 이미지를 저장합니다.",
+    response={
+        200: {"description" : "success response"},
+        404: {"description" : "Not Found"}
+    }
+)
+def upload():
+    id = request.form.get("id")
+    file = request.files.get("file")
+    
+    if not file:
+        return response_json_with_code()
+    
+    user_row = User.get_user_by_id(id)
+    
+    if not user_row:
+        return response_json_with_code(404)
+    
+    filename = file.filename.split(".")
+    new_filename = f"{id}.{filename[1]}"
+    user_row.image = new_filename
+    
+    full_path = os.path.join(path, new_filename)
+    file.save(full_path)
+    db.session.commit()
+
+    return response_json_with_code()
+
+
+@auth_bp.route("image/<id>", methods=["GET"])
+@doc(
+    tags=[API_CATEGORY],
+    summary="donwload",
+    description="image download"
+)
+def donwload(id):
+    user_row = User.get_user_by_id(id)
+    abspath = os.path.abspath(path)
+    return send_from_directory(abspath, user_row.image)
