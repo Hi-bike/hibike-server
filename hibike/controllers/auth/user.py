@@ -146,12 +146,13 @@ def upload():
     return response_json_with_code()
 
 
-@auth_bp.route("/image/<filename>", methods=["GET"])
+@auth_bp.route("/image/<id>", methods=["GET"])
 @doc(
     tags=[API_CATEGORY],
     summary="donwload",
     description="image download"
 )
-def donwload(filename):
+def donwload(id):
+    image = User.get_user_by_id(id).image
     abspath = os.path.abspath(path)
-    return send_from_directory(abspath, filename)
+    return send_from_directory(abspath, image)
