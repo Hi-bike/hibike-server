@@ -126,7 +126,7 @@ def get_user_profile(id):
 def upload():
     id = request.form.get("id")
     file = request.files.get("file")
-    
+
     if not file:
         return response_json_with_code()
     
@@ -146,13 +146,12 @@ def upload():
     return response_json_with_code()
 
 
-@auth_bp.route("image/<id>", methods=["GET"])
+@auth_bp.route("/image/<filename>", methods=["GET"])
 @doc(
     tags=[API_CATEGORY],
     summary="donwload",
     description="image download"
 )
-def donwload(id):
-    user_row = User.get_user_by_id(id)
+def donwload(filename):
     abspath = os.path.abspath(path)
-    return send_from_directory(abspath, user_row.image)
+    return send_from_directory(abspath, filename)

@@ -146,3 +146,5 @@ default.cfg
 test.py
 migrations/
 google_client_secret.json
+*.png
+*.jpg
