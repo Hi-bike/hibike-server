@@ -32,13 +32,14 @@ from pytz import timezone
 def get_posts(page): 
     query = db.session.query(Board).order_by(Board.time.desc()).slice((page - 1) * 5, page * 5)
     rows = query.all()
-    result = []
+    result = {}
     if rows == []:
         return response_json_with_code(
             is_last = True
         )
+    i = 1
     for row in rows:
-        result.append(row.to_dict())
+        result[i]= row.to_dict()
 
     return response_json_with_code(
         result=result,
