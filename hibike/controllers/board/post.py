@@ -40,7 +40,7 @@ def get_posts(page):
     i = 1
     for row in rows:
         result[i]= row.to_dict()
-
+        i+=1
     return response_json_with_code(
         result=result,
         is_last = False
