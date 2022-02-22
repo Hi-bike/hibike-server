@@ -1,6 +1,6 @@
 from flask import Blueprint
 
-auth_bp = Blueprint("board", __name__, url_prefix="/api/board")
+board_bp = Blueprint("board", __name__, url_prefix="/api/board")
 
 API_CATEGORY = "Board"
 
