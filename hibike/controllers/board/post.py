@@ -35,11 +35,10 @@ def get_posts(page):
     result = []
     if rows == []:
         return response_json_with_code(
-            result=result,
             is_last = True
         )
-    # for row in rows:
-    #     result.append(row.to_dict())
+    for row in rows:
+        result.append(row.to_dict())
 
     return response_json_with_code(
         result=result,

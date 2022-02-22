@@ -22,3 +22,11 @@ class Board(db.Model):
     contents = db.Column(db.Text)
     time = db.Column(db.DateTime)
     id = db.Column(db.Integer, primary_key = True)
+
+    def to_dict(self):
+        return {
+        "id" : self.id,
+        "nickname" : self.nickname,
+        "title" : self.title,
+        "contents" : self.contents,
+    }
