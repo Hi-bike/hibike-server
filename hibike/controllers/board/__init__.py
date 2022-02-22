@@ -2,7 +2,7 @@ from flask import Blueprint
 
 auth_bp = Blueprint("board", __name__, url_prefix="/api/board")
 
-API_CATEGORY = "Auth"
+API_CATEGORY = "Board"
 
 authorization_header = {
     "Authorization": {
@@ -18,5 +18,5 @@ authorization_header = {
     }
 }
 
-from hibike.controllers.auth.signin import *
+from hibike.controllers.board.post import *
 
