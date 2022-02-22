@@ -38,19 +38,20 @@ class User(db.Model):
 class UserRiding(db.Model):
     __tablename__ = "user_riding"
     __table_args__ = {"mysql_collate": "utf8_bin"}
-    user_idx = db.Column(db.Integer, nullable=False)
-    distance = db.Column(db.Float(10), default=0)
-    time = db.Column(db.String(30), default=0)
-    id = db.Column(db.Integer, primary_key = True)
+    idx = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String(30), nullable=False)
+    distance = db.Column(db.Float, default=0.0)
+    time = db.Column(db.Float, default=0.0)
 
     @staticmethod
-    def get_user_riding_by_idx(idx):
+    def get_user_riding_by_id(user_id):
         return UserRiding.query.filter(
-            UserRiding.user_idx == idx
+            UserRiding.user_id == user_id
         ).one_or_none()
 
     def to_dict(self):
         return {
+            "user_id":self.user_id,
             "distance" : self.distance,
             "time" : self.time,
         }

@@ -15,12 +15,6 @@ from hibike.utils.common import (
 )   
 import bcrypt
 
-def is_empty(email, password, birth, gender, nickname):
-    if email == "" or password == "" or birth == "" or gender == "" or nickname == ""\
-    or email == None or password == None or birth == None or gender == None or nickname == None:
-        return True
-    else:
-        return False
 
 @auth_bp.route('/signup', methods=["POST"])
 @use_kwargs(RequestSignupSchema)
@@ -32,38 +26,26 @@ def is_empty(email, password, birth, gender, nickname):
                401: {"description" : "Unauthorized"},
     }
 )
-def signup(id, password, nickname):
-    if not 1 <= len(nickname) <= 30:
-        return response_json_with_code(
-            res_code = 422,
-            result = "letter count error"
-        )
-        
+def signup(id, password, nickname):        
     user_row = User.get_user_by_id(id)
-    
-    if user_row is None:
-        encrypted_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())                
-        db.session.add(User(
-            id = id,
-            password = encrypted_password,
-            nickname = nickname,
-        ))
-        db.session.commit()
-
-        user_row = User.get_user_by_id(id)
-        db.session.add(UserRiding(
-            user_idx = user_row.idx
-        ))
-        db.session.commit()
-        
-    else:
+    if user_row:
         return response_json_with_code(
             401,
             result='이미 존재하는 아이디'
         )
-    return response_json_with_code(
-        200,
-        result = 'success'
-    )
+        
+    encrypted_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())                
+    db.session.add(User(
+        id = id,
+        password = encrypted_password,
+        nickname = nickname,
+    ))
+    db.session.add(UserRiding(
+        user_id = id
+    ))
+    
+    db.session.commit()
+    
+    return response_json_with_code()
     
     
