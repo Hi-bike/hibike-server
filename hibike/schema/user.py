@@ -66,3 +66,8 @@ class RequestSnsSignupSchema(Schema):
       gender = fields.Str(description="성별", required=True)
       nickname = fields.Str(description="닉네임", required=True)
       platform_type = fields.Str(description="플랫폼 종류(google, kakao, naver)", required=True)
+
+class RequestPostSchema(Schema):
+      id = fields.Str(description="유저 아이디", required=True)
+      title = fields.Str(description="제목", required=True)
+      contents = fields.Str(description="내용", required=True)

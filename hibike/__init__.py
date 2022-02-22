@@ -57,7 +57,9 @@ cdn.set_cdn_url(app.config['CDN_URL'], docker=True)
 mail = Mail(app)
 
 from hibike.controllers.auth import auth_bp
+from hibike.controllers.board import board_bp
 app.register_blueprint(auth_bp)
+app.register_blueprint(board_bp)
 
 docs.register_existing_resources()
 # 스웨거에서 options 제거
