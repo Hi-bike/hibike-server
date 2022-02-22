@@ -65,7 +65,7 @@ def write_post(title, contents, id):
         title=title,
         contents=contents,
         nickname = user_row.nickname,
-        create_date=time
+        time=time
     ))
     db.session.commit()
 
