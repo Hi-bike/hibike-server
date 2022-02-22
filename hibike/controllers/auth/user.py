@@ -18,7 +18,6 @@ from hibike.utils.common import (
 from hibike import db
 import os
 
-
 path = os.path.abspath("./hibike/static/image/profile")
 
 @auth_bp.route('/test', methods=["POST"])
