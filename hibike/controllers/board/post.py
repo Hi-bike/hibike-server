@@ -39,11 +39,11 @@ def get_posts(page):
         )
     i = 1
     for row in rows:
-        if i == 1:
-            index = "first"
-        elif i == 2:
-            index = "second"
-        result[index]= row.to_dict()
+        # if i == 1:
+        #     index = "first"
+        # elif i == 2:
+        #     index = "second"
+        result[i]= row.to_dict()
         i+=1
     return response_json_with_code(
         result=result,
