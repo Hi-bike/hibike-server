@@ -35,7 +35,7 @@ def get_posts(page):
     result = {}
     if rows == []:
         return response_json_with_code(
-            is_last = True
+            is_last = "True"
         )
     i = 1
     for row in rows:
@@ -47,7 +47,7 @@ def get_posts(page):
         i+=1
     return response_json_with_code(
         result=result,
-        is_last = False
+        is_last = "False"
     )
 
 @board_bp.route("/post", methods=["POST"])
