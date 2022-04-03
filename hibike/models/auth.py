@@ -3,7 +3,7 @@ from hibike import db, app
 class User(db.Model):
     __tablename__ = "user"
     __table_args__ = {"mysql_collate": "utf8_bin"}
-    idx = db.Column(db.Integer, primary_key=True)
+    idx = db.Column(db.Integer, primary_key=True, autoincrement=True)
     id = db.Column(db.String(30), nullable=False)
     password = db.Column(db.String(150), nullable=False)
     nickname = db.Column(db.String(30), nullable=False)
@@ -38,7 +38,7 @@ class User(db.Model):
 class UserRiding(db.Model):
     __tablename__ = "user_riding"
     __table_args__ = {"mysql_collate": "utf8_bin"}
-    idx = db.Column(db.Integer, primary_key=True)
+    idx = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.String(30), nullable=False)
     distance = db.Column(db.Float, default=0.0)
     time = db.Column(db.Float, default=0.0)

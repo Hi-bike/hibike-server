@@ -1,3 +1,4 @@
+from pydoc import describe
 from marshmallow import fields, Schema
 
 
@@ -71,3 +72,8 @@ class RequestPostSchema(Schema):
       id = fields.Str(description="유저 아이디", required=True)
       title = fields.Str(description="제목", required=True)
       contents = fields.Str(description="내용", required=True)
+
+class RequestReplySchema(Schema):
+      id = fields.Str(description="유저 아이디", required=True)
+      contents = fields.Str(description="내용", required=True)
+      post_id = fields.Int(description="포스트 id", requird=True)      
