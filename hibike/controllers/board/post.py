@@ -162,7 +162,7 @@ def get_posts_contents(post_id):
                401: {"description" : "Unauthorized"},
     }
 )
-def get_posts_contents(reply_id): 
+def get_reply_contents(reply_id): 
     row = db.session.query(Reply).filter(Reply.reply_id == reply_id).first()
     
     return response_json_with_code(
