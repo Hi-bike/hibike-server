@@ -105,7 +105,7 @@ def write_reply(contents, id, post_id):
         result="Success"
     )    
 
-@board_bp.route("/reply/<int:page>", methods=["GET"])
+@board_bp.route("/reply/<int:page>/<int:post_id>", methods=["GET"])
 @doc(
     tags=[API_CATEGORY],
     summary="댓글 반환",
@@ -114,8 +114,8 @@ def write_reply(contents, id, post_id):
                401: {"description" : "Unauthorized"},
     }
 )
-def get_reply(page): 
-    query = db.session.query(Reply).order_by(Reply.time.asc()).slice((page - 1) * 5, page * 5)
+def get_reply(page,post_id): 
+    query = db.session.query(Reply).filter(Reply.post_id == post_id).order_by(Reply.time.asc()).slice((page - 1) * 5, page * 5)
     rows = query.all()
     result = {}
     if rows == []:
