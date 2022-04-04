@@ -134,3 +134,38 @@ def get_reply(page,post_id):
         result=result,
         is_last = "False"
     )
+
+@board_bp.route("/post_content/<int:post_id>", methods=["GET"])
+@doc(
+    tags=[API_CATEGORY],
+    summary="게시글 내용 반환",
+    description="게시글 내용 반환",
+    responses={200: {"description" : "success response"},
+               401: {"description" : "Unauthorized"},
+    }
+)
+def get_posts_contents(post_id): 
+    row = db.session.query(Board).filter(Board.post_id == post_id).first()
+    
+    return response_json_with_code(
+        title = row.title,
+        contents = row.contents,
+        nickname = row.nickname
+    )
+
+@board_bp.route("/reply_content/<int:reply_id>", methods=["GET"])
+@doc(
+    tags=[API_CATEGORY],
+    summary="게시글 내용 반환",
+    description="게시글 내용 반환",
+    responses={200: {"description" : "success response"},
+               401: {"description" : "Unauthorized"},
+    }
+)
+def get_posts_contents(reply_id): 
+    row = db.session.query(Reply).filter(Reply.reply_id == reply_id).first()
+    
+    return response_json_with_code(
+        contents = row.contents,
+        nickname = row.nickname
+    )
