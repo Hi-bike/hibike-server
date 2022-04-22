@@ -55,7 +55,6 @@ class RidingTotal(db.Model):
     __table_args__ = {"mysql_collate": "utf8_bin"}
     user_id = db.Column(db.String(30), nullable=False)
     total_time = db.Column(db.String(30), nullable=True)
-    total_speed = db.Column(db.String(30), nullable=True)
     total_distance = db.Column(db.String(30), nullable=True)
     id = db.Column(db.Integer, primary_key = True)
     
@@ -73,7 +72,6 @@ class RidingTotal(db.Model):
             riding_second = splited_time[1]
             
             row.riding_time = (int(total_minute) + int(riding_minute)) + " : " + (int(total_second) + int(riding_second))
-            row.total_speed = float(row.total_speed) + float(ave_speed)
             row.total_distance = float(row.total_distance) + float(ave_distance)
             
             db.session.commit()
@@ -81,7 +79,6 @@ class RidingTotal(db.Model):
             db.session.add(RidingTotal(
                 user_id=user_id,
                 total_time=riding_time,
-                total_speed=ave_speed,
                 total_distance=ave_distance
             ))
             db.session.commit()
