@@ -64,7 +64,15 @@ class RidingTotal(db.Model):
     def update(user_id, riding_time, ave_speed, ave_distance):
         row = RidingTotal.get_by_user_id(user_id)
         if row:
-            row.riding_time = float(row.total_time) + float(riding_time)
+            splited_time = row.total_time.split(" : ")
+            total_minute = splited_time[0]
+            total_second = splited_time[1]
+            
+            splited_time = riding_time.split(" : ")
+            riding_minute = splited_time[0]
+            riding_second = splited_time[1]
+            
+            row.riding_time = (total_minute + riding_minute) + " : " + (total_second + riding_second)
             row.total_speed = float(row.total_speed) + float(ave_speed)
             row.total_distance = float(row.total_distance) + float(ave_distance)
             
