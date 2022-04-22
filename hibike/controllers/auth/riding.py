@@ -11,7 +11,7 @@ from hibike.schema.user import (
 from hibike.utils.common import (
     response_json_with_code,
 )
-
+from datetime import timezone, datetime
 
 @auth_bp.route("/rone/<int:id>", methods=["GET"])
 @doc(
@@ -47,8 +47,10 @@ def get_riding_info_one(id):
     }
 )
 def create_riding(user_id, riding_time, ave_speed, ave_distance):
+    KST = timezone('Asia/Seoul')
+    time = datetime.now().astimezone(KST).strftime('%Y-%m-%d %H:%M:%S')
     RidingAve.create(
-        user_id, riding_time, ave_speed, ave_distance
+        user_id, riding_time, ave_speed, ave_distance, time
     )
     
     RidingTotal.update(

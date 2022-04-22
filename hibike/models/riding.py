@@ -13,12 +13,13 @@ class RidingAve(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     
     @staticmethod
-    def create(user_id, riding_time, ave_speed, ave_distance):
+    def create(user_id, riding_time, ave_speed, ave_distance, time):
         db.session.add(RidingAve(
             user_id=user_id,
             riding_time=riding_time,
             ave_speed=ave_speed,
-            ave_distance=ave_distance
+            ave_distance=ave_distance,
+            create_time=time
         ))
         db.session.commit()
         
