@@ -64,14 +64,14 @@ class RidingTotal(db.Model):
         row = RidingTotal.get_by_user_id(user_id)
         if row:
             splited_time = row.total_time.split(" : ")
-            total_minute = splited_time[0]
-            total_second = splited_time[1]
+            total_minute = int(splited_time[0])
+            total_second = int(splited_time[1])
             
             splited_time = riding_time.split(" : ")
-            riding_minute = splited_time[0]
-            riding_second = splited_time[1]
+            riding_minute = int(splited_time[0])
+            riding_second = int(splited_time[1])
             
-            row.riding_time = (int(total_minute) + int(riding_minute)) + " : " + (int(total_second) + int(riding_second))
+            row.riding_time = str(total_minute + riding_minute) + " : " + str(total_second + riding_second)
             row.total_distance = float(row.total_distance) + float(ave_distance)
             
             db.session.commit()
