@@ -27,6 +27,7 @@ def get_riding_info_one(id):
     
     return response_json_with_code(
         result={
+            "id":row.id,
             "user_id":row.user_id,
             "riding_time":row.riding_time,
             "ave_speed":row.ave_speed,
@@ -88,20 +89,21 @@ def get_riding_total(user_id):
     }
 )
 def get_riding_all(user_id, page):
-    ridings = RidingAve.get_all_by_page(user_id, page)
+    riding_rows = RidingAve.get_all_by_page(user_id, page)
         
     result = []
-    if ridings == []:
+    if riding_rows == []:
         return response_json_with_code(
             result=result,
             is_last = "True"
         )
     
-    for riding in ridings:
+    for row in riding_rows:
         result.append({
-            "riding_time": riding.riding_time,
-            "ave_speed": riding.ave_speed,
-            "ave_distance": riding.ave_distance,
+            "id":row.id,
+            "riding_time": row.riding_time,
+            "ave_speed": row.ave_speed,
+            "ave_distance": row.ave_distance,
         })
             
     return response_json_with_code(
