@@ -9,16 +9,16 @@ class RidingAve(db.Model):
     create_time = db.Column(db.DateTime)
     riding_time = db.Column(db.String(30), nullable=True)
     ave_speed = db.Column(db.String(30), nullable=True)
-    ave_distence = db.Column(db.String(30), nullable=True)
+    ave_distance = db.Column(db.String(30), nullable=True)
     id = db.Column(db.Integer, primary_key = True)
     
     @staticmethod
-    def create(user_id, riding_time, ave_speed, ave_distence):
+    def create(user_id, riding_time, ave_speed, ave_distance):
         db.session.add(RidingAve(
             user_id=user_id,
             riding_time=riding_time,
             ave_speed=ave_speed,
-            ave_distence=ave_distence
+            ave_distance=ave_distance
         ))
         db.session.commit()
         
@@ -55,17 +55,17 @@ class RidingTotal(db.Model):
     user_id = db.Column(db.String(30), nullable=False)
     total_time = db.Column(db.String(30), nullable=True)
     total_speed = db.Column(db.String(30), nullable=True)
-    total_distence = db.Column(db.String(30), nullable=True)
+    total_distance = db.Column(db.String(30), nullable=True)
     id = db.Column(db.Integer, primary_key = True)
     
         
     @staticmethod
-    def update(user_id, riding_time, ave_speed, ave_distence):
+    def update(user_id, riding_time, ave_speed, ave_distance):
         row = RidingTotal.get_by_user_id(user_id)
         if row:
             row.riding_time = float(row.total_time) + float(riding_time)
             row.total_speed = float(row.total_speed) + float(ave_speed)
-            row.total_distence = float(row.total_distence) + float(ave_distence)
+            row.total_distance = float(row.total_distance) + float(ave_distance)
             
             db.session.commit()
         else:
@@ -73,7 +73,7 @@ class RidingTotal(db.Model):
                 user_id=user_id,
                 total_time=riding_time,
                 total_speed=ave_speed,
-                total_distence=ave_distence
+                total_distance=ave_distance
             ))
             db.session.commit()
             
