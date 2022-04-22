@@ -56,7 +56,7 @@ def create_riding(user_id, riding_time, ave_speed, ave_distance):
     )
     
     RidingTotal.update(
-        user_id, riding_time, ave_speed, ave_distance
+        user_id, riding_time, ave_distance
     )
     
     return response_json_with_code()

@@ -60,7 +60,7 @@ class RidingTotal(db.Model):
     
         
     @staticmethod
-    def update(user_id, riding_time, ave_speed, ave_distance):
+    def update(user_id, riding_time, ave_distance):
         row = RidingTotal.get_by_user_id(user_id)
         if row:
             splited_time = row.total_time.split(" : ")
@@ -71,7 +71,7 @@ class RidingTotal(db.Model):
             riding_minute = int(splited_time[0])
             riding_second = int(splited_time[1])
             
-            row.riding_time = str(total_minute + riding_minute) + " : " + str(total_second + riding_second)
+            row.total_time = str(total_minute + riding_minute) + " : " + str(total_second + riding_second)
             row.total_distance = float(row.total_distance) + float(ave_distance)
             
             db.session.commit()
