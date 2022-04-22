@@ -30,7 +30,7 @@ def get_riding_info_one(id):
             "user_id":row.user_id,
             "riding_time":row.riding_time,
             "ave_speed":row.ave_speed,
-            "ave_distence":row.ave_distence
+            "ave_distance":row.ave_distance
         }
     )
     
@@ -45,13 +45,13 @@ def get_riding_info_one(id):
                401: {"description" : "Unauthorized"},
     }
 )
-def create_riding(user_id, riding_time, ave_speed, ave_distence):
+def create_riding(user_id, riding_time, ave_speed, ave_distance):
     RidingAve.create(
-        user_id, riding_time, ave_speed, ave_distence
+        user_id, riding_time, ave_speed, ave_distance
     )
     
     RidingTotal.update(
-        user_id, riding_time, ave_speed, ave_distence
+        user_id, riding_time, ave_speed, ave_distance
     )
     
     return response_json_with_code()
@@ -73,12 +73,12 @@ def get_riding_total(user_id):
         result={
             "total_time":row.total_time,
             "total_speed":row.total_speed,
-            "total_distence":row.total_distence
+            "total_distance":row.total_distance
         }
     )
 
 
-@auth_bp.route("/rpage/<user_id>/<int:page>", methods=["GET"])
+@auth_bp.route("/rall/<user_id>/<int:page>", methods=["GET"])
 @doc(
     tags=[API_CATEGORY],
     summary="라이딩 페이지 반환",
@@ -101,7 +101,7 @@ def get_riding_all(user_id, page):
         result.append({
             "riding_time": riding.riding_time,
             "ave_speed": riding.ave_speed,
-            "ave_distence": riding.ave_distence,
+            "ave_distance": riding.ave_distance,
         })
             
     return response_json_with_code(
