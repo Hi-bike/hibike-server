@@ -72,7 +72,7 @@ class RidingTotal(db.Model):
             riding_minute = splited_time[0]
             riding_second = splited_time[1]
             
-            row.riding_time = (total_minute + riding_minute) + " : " + (total_second + riding_second)
+            row.riding_time = (int(total_minute) + int(riding_minute)) + " : " + (int(total_second) + int(riding_second))
             row.total_speed = float(row.total_speed) + float(ave_speed)
             row.total_distance = float(row.total_distance) + float(ave_distance)
             
