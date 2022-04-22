@@ -3,7 +3,7 @@ from hibike import db, app
 NUMBER_OF_INFO_PER_PAGE = 8
 
 class RidingAve(db.Model):
-    __tablename__ = "RidingAve"
+    __tablename__ = "riding_ave"
     __table_args__ = {"mysql_collate": "utf8_bin"}
     user_id = db.Column(db.String(30), nullable=False)
     create_time = db.Column(db.DateTime)
@@ -50,7 +50,7 @@ class RidingAve(db.Model):
         
     
 class RidingTotal(db.Model):
-    __tablename__ = "RidingTotal"
+    __tablename__ = "riding_total"
     __table_args__ = {"mysql_collate": "utf8_bin"}
     user_id = db.Column(db.String(30), nullable=False)
     total_time = db.Column(db.String(30), nullable=True)
