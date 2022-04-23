@@ -153,5 +153,8 @@ def upload():
 )
 def donwload(id):
     image = User.get_user_by_id(id).image
-    abspath = os.path.abspath(path)
-    return send_from_directory(abspath, image)
+    if image:
+        abspath = os.path.abspath(path)
+        return send_from_directory(abspath, image)
+    else:
+        return response_json_with_code()
