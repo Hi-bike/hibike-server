@@ -2,51 +2,54 @@ from hibike import db, app
 
 NUMBER_OF_INFO_PER_PAGE = 8
 
-class RidingAve(db.Model):
-    __tablename__ = "riding_ave"
+class RidingEach(db.Model):
+    __tablename__ = "riding_each"
     __table_args__ = {"mysql_collate": "utf8_bin"}
-    # TODO: 단순 주행, 목적지가 있는 주행(출발지, 목적지 저장)
     user_id = db.Column(db.String(30), nullable=False)
     create_time = db.Column(db.DateTime)
     riding_time = db.Column(db.String(30), nullable=True)
     ave_speed = db.Column(db.String(30), nullable=True)
     distance = db.Column(db.String(30), nullable=True)
+    starting_point = db.Column(db.String(50), default="") #출발지
+    end_point = db.Column(db.String(50), default="") #도착지
     id = db.Column(db.Integer, primary_key = True)
     
     @staticmethod
-    def create(user_id, riding_time, ave_speed, distance, time):
-        db.session.add(RidingAve(
+    def create(user_id, riding_time, ave_speed, distance, create_time, starting_point="", end_point=""):
+        db.session.add(RidingEach(
             user_id=user_id,
             riding_time=riding_time,
             ave_speed=ave_speed,
             distance=distance,
-            create_time=time
+            create_time=create_time,
+            starting_point=starting_point, 
+            end_point=end_point
         ))
         db.session.commit()
         
     @staticmethod
     def get_one_by_id(id):
-        return RidingAve.query.filter(
+        return RidingEach.query.filter(
             id==id
         ).first()
     
     @staticmethod
     def get_one_by_user_id(user_id):
-        return RidingAve.query.filter(
+        return RidingEach.query.filter(
             user_id==user_id
         ).one_or_none()
     
     @staticmethod
     def get_all_by_user_id(user_id):
-        return RidingAve.query.filter(
+        return RidingEach.query.filter(
             user_id==user_id
         ).all()
     
     @staticmethod
     def get_all_by_page(user_id, page):
-        return db.session.query(RidingAve)\
-            .filter(RidingAve.user_id==user_id)\
-            .order_by(RidingAve.riding_time.desc())\
+        return db.session.query(RidingEach)\
+            .filter(RidingEach.user_id==user_id)\
+            .order_by(RidingEach.riding_time.desc())\
             .slice(page, page+NUMBER_OF_INFO_PER_PAGE)\
             .all()
         

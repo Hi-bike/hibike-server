@@ -77,8 +77,10 @@ class RequestReplySchema(Schema):
       contents = fields.Str(description="내용", required=True)
       post_id = fields.Int(description="포스트 id", requird=True)      
 
-class RequestRidingAveSchema(Schema):
+class RequestRidingEachSchema(Schema):
       user_id = fields.Str(description="유저 아이디", required=True)
       riding_time = fields.Str(description="주행 시간", required=True)
       ave_speed = fields.Str(description="평균 속도", required=True)
       distance = fields.Str(description="평균 거리", required=True)
+      starting_point = fields.Str(description="출발지", required=True)
+      end_point = fields.Str(description="도착지", required=True)

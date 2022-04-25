@@ -1,12 +1,12 @@
 from flask_apispec import doc, use_kwargs
 from hibike import app, db
-from hibike.models.riding import RidingAve, RidingTotal
+from hibike.models.riding import RidingEach, RidingTotal
 from hibike.controllers.auth import (
     API_CATEGORY,
     auth_bp
 )
 from hibike.schema.user import (
-    RequestRidingAveSchema,
+    RequestRidingEachSchema,
 )
 from hibike.utils.common import (
     response_json_with_code,
@@ -24,7 +24,7 @@ from pytz import timezone
     }
 )
 def get_riding_info_one(id):
-    row = RidingAve.get_one_by_id(id)
+    row = RidingEach.get_one_by_id(id)
     
     return response_json_with_code(
         result={
@@ -38,7 +38,7 @@ def get_riding_info_one(id):
     
     
 @auth_bp.route("/rone", methods=["POST"])
-@use_kwargs(RequestRidingAveSchema)
+@use_kwargs(RequestRidingEachSchema)
 @doc(
     tags=[API_CATEGORY],
     summary="라이딩 저장",
@@ -47,12 +47,12 @@ def get_riding_info_one(id):
                401: {"description" : "Unauthorized"},
     }
 )
-def create_riding(user_id, riding_time, ave_speed, distance):
+def create_riding(user_id, riding_time, ave_speed, distance, starting_point, end_point):
     KST = timezone('Asia/Seoul')
     time = datetime.now().astimezone(KST).strftime('%Y-%m-%d %H:%M:%S')
     
-    RidingAve.create(
-        user_id, riding_time, ave_speed, distance, time
+    RidingEach.create(
+        user_id, riding_time, ave_speed, distance, time, starting_point, end_point
     )
     
     RidingTotal.update(
@@ -93,7 +93,7 @@ def get_riding_total(user_id):
     }
 )
 def get_riding_all(user_id, page):
-    riding_rows = RidingAve.get_all_by_page(user_id, page)
+    riding_rows = RidingEach.get_all_by_page(user_id, page)
         
     result = []
     if riding_rows == []:
