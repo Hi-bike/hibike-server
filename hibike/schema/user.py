@@ -1,4 +1,3 @@
-from pydoc import describe
 from marshmallow import fields, Schema
 
 
@@ -82,4 +81,4 @@ class RequestRidingAveSchema(Schema):
       user_id = fields.Str(description="유저 아이디", required=True)
       riding_time = fields.Str(description="주행 시간", required=True)
       ave_speed = fields.Str(description="평균 속도", required=True)
-      ave_distance = fields.Str(description="평균 거리", required=True)
+      distance = fields.Str(description="평균 거리", required=True)

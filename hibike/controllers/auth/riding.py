@@ -32,7 +32,7 @@ def get_riding_info_one(id):
             "user_id":row.user_id,
             "riding_time":row.riding_time,
             "ave_speed":row.ave_speed,
-            "ave_distance":row.ave_distance
+            "distance":row.distance
         }
     )
     
@@ -47,16 +47,16 @@ def get_riding_info_one(id):
                401: {"description" : "Unauthorized"},
     }
 )
-def create_riding(user_id, riding_time, ave_speed, ave_distance):
+def create_riding(user_id, riding_time, ave_speed, distance):
     KST = timezone('Asia/Seoul')
     time = datetime.now().astimezone(KST).strftime('%Y-%m-%d %H:%M:%S')
     
     RidingAve.create(
-        user_id, riding_time, ave_speed, ave_distance, time
+        user_id, riding_time, ave_speed, distance, time
     )
     
     RidingTotal.update(
-        user_id, riding_time, ave_distance
+        user_id, riding_time, distance
     )
     
     return response_json_with_code()
@@ -107,7 +107,7 @@ def get_riding_all(user_id, page):
             "id":row.id,
             "riding_time": row.riding_time,
             "ave_speed": row.ave_speed,
-            "ave_distance": row.ave_distance,
+            "distance": row.distance,
         })
             
     return response_json_with_code(

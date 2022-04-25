@@ -5,20 +5,21 @@ NUMBER_OF_INFO_PER_PAGE = 8
 class RidingAve(db.Model):
     __tablename__ = "riding_ave"
     __table_args__ = {"mysql_collate": "utf8_bin"}
+    # TODO: 단순 주행, 목적지가 있는 주행(출발지, 목적지 저장)
     user_id = db.Column(db.String(30), nullable=False)
     create_time = db.Column(db.DateTime)
     riding_time = db.Column(db.String(30), nullable=True)
     ave_speed = db.Column(db.String(30), nullable=True)
-    ave_distance = db.Column(db.String(30), nullable=True)
+    distance = db.Column(db.String(30), nullable=True)
     id = db.Column(db.Integer, primary_key = True)
     
     @staticmethod
-    def create(user_id, riding_time, ave_speed, ave_distance, time):
+    def create(user_id, riding_time, ave_speed, distance, time):
         db.session.add(RidingAve(
             user_id=user_id,
             riding_time=riding_time,
             ave_speed=ave_speed,
-            ave_distance=ave_distance,
+            distance=distance,
             create_time=time
         ))
         db.session.commit()
@@ -60,7 +61,7 @@ class RidingTotal(db.Model):
     
         
     @staticmethod
-    def update(user_id, riding_time, ave_distance):
+    def update(user_id, riding_time, distance):
         row = RidingTotal.get_by_user_id(user_id)
         if row:
             splited_time = row.total_time.split(" : ")
@@ -72,14 +73,14 @@ class RidingTotal(db.Model):
             riding_second = int(splited_time[1])
             
             row.total_time = str(total_minute + riding_minute) + " : " + str(total_second + riding_second)
-            row.total_distance = float(row.total_distance) + float(ave_distance)
+            row.total_distance = float(row.total_distance) + float(distance)
             
             db.session.commit()
         else:
             db.session.add(RidingTotal(
                 user_id=user_id,
                 total_time=riding_time,
-                total_distance=ave_distance
+                total_distance=distance
             ))
             db.session.commit()
             
