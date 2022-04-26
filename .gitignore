@@ -146,4 +146,3 @@ default.cfg
 test.py
 migrations/
 *.png
-*.jpg
