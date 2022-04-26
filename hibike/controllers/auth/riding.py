@@ -116,7 +116,7 @@ def get_riding_all(user_id, page):
     
     for row in riding_rows:
         result.append({
-            "create_time": row.create_time,
+            "create_time": str(row.create_time),
             "distance": row.distance,
             "ave_speed": row.ave_speed,
             "riding_time": row.riding_time,
