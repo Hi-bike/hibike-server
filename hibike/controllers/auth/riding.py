@@ -112,10 +112,13 @@ def get_riding_all(user_id, page):
     
     for row in riding_rows:
         result.append({
-            "id":row.id,
-            "riding_time": row.riding_time,
-            "ave_speed": row.ave_speed,
+            "creating_time": row.create_time,
             "distance": row.distance,
+            "ave_speed": row.ave_speed,
+            "riding_time": row.riding_time,
+            "starting_point": row.starting_point,
+            "end_point": row.end_point,
+            "unique_id": row.unique_id,
         })
             
     return response_json_with_code(
