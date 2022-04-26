@@ -10,8 +10,8 @@ class RidingEach(db.Model):
     riding_time = db.Column(db.String(30), nullable=True)
     ave_speed = db.Column(db.String(30), nullable=True)
     distance = db.Column(db.String(30), nullable=True)
-    starting_point = db.Column(db.Str, default="") #출발지
-    end_point = db.Column(db.Str, default="") #도착지
+    starting_point = db.Column(db.Text, default="") #출발지
+    end_point = db.Column(db.Text, default="") #도착지
     id = db.Column(db.Integer, primary_key = True)
     
     @staticmethod
