@@ -12,12 +12,15 @@ class RidingEach(db.Model):
     distance = db.Column(db.String(30), nullable=True)
     starting_point = db.Column(db.Text, default="") #출발지
     end_point = db.Column(db.Text, default="") #도착지
+    image = db.Column(db.String(30), nullable=True)
+    unique_id = db.Column(db.String(30), nullable=True)
     id = db.Column(db.Integer, primary_key = True)
     
     @staticmethod
-    def create(user_id, riding_time, ave_speed, distance, create_time, starting_point, end_point):
+    def create(user_id, unique_id, riding_time, ave_speed, distance, create_time, starting_point, end_point):
         db.session.add(RidingEach(
             user_id=user_id,
+            unique_id=unique_id,
             riding_time=riding_time,
             ave_speed=ave_speed,
             distance=distance,
@@ -31,6 +34,12 @@ class RidingEach(db.Model):
     def get_one_by_id(id):
         return RidingEach.query.filter(
             id==id
+        ).first()
+        
+    @staticmethod
+    def get_one_by_unique_id(unique_id):
+        return RidingEach.query.filter(
+            unique_id==unique_id
         ).first()
     
     @staticmethod

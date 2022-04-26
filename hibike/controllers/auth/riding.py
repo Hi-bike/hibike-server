@@ -53,12 +53,12 @@ def get_riding_info_one(id):
                401: {"description" : "Unauthorized"},
     }
 )
-def create_riding(user_id, riding_time, ave_speed, distance, starting_point, end_point):
+def create_riding(user_id, unique_id, riding_time, ave_speed, distance, starting_point, end_point):
     KST = timezone('Asia/Seoul')
     time = datetime.now().astimezone(KST).strftime('%Y-%m-%d %H:%M:%S')
     
     RidingEach.create(
-        user_id, riding_time, ave_speed, distance, time, 
+        user_id, unique_id, riding_time, ave_speed, distance, time, 
         starting_point=starting_point,
         end_point=end_point
     )
@@ -134,28 +134,40 @@ def get_riding_all(user_id, page):
         404: {"description" : "Not Found"}
     }
 )
-def upload():
-    id = int(request.form.get("id"))
+def rupload():
+    unique_id = request.form.get("unique_id")
     file = request.files.get("file")
-
+    
     if not file:
         return response_json_with_code()
     
     filename = file.filename.split(".")
-    new_filename = f"{id}.{filename[1]}"
+    new_filename = f"{unique_id}.{filename[1]}"
     
-    full_path = os.path.join(path, new_filename)
-    file.save(full_path)
+    row = RidingEach.get_one_by_unique_id(unique_id)
+    
+    if row:
+        row.image = new_filename
+        db.session.commit()
+        
+        full_path = os.path.join(path, new_filename)
+        file.save(full_path)
 
     return response_json_with_code()
 
 
-@auth_bp.route("/rimage/<id>", methods=["GET"])
+@auth_bp.route("/rimage/<unique_id>", methods=["GET"])
 @doc(
     tags=[API_CATEGORY],
     summary="riding image donwload",
     description="image download"
 )
-def donwload(id):
-    abspath = os.path.abspath(path)
-    return send_from_directory(abspath, f"{id}.png")
+def rdonwload(unique_id):
+    row = RidingEach.get_one_by_unique_id(unique_id)
+    if row:
+        image_name = row.image
+        
+        abspath = os.path.abspath(path)
+        return send_from_directory(abspath, image_name)
+    
+    return response_json_with_code()
