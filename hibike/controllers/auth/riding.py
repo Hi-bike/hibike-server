@@ -47,12 +47,14 @@ def get_riding_info_one(id):
                401: {"description" : "Unauthorized"},
     }
 )
-def create_riding(user_id, riding_time, ave_speed, distance, starting_point, end_point):
+def create_riding(user_id, riding_time, ave_speed, distance, sp_lati, sp_long, ep_lati, ep_long):
     KST = timezone('Asia/Seoul')
     time = datetime.now().astimezone(KST).strftime('%Y-%m-%d %H:%M:%S')
     
     RidingEach.create(
-        user_id, riding_time, ave_speed, distance, time, starting_point, end_point
+        user_id, riding_time, ave_speed, distance, time, 
+        sp_lati=sp_lati, sp_long=sp_long,
+        ep_lati=ep_lati, ep_long=ep_long
     )
     
     RidingTotal.update(
