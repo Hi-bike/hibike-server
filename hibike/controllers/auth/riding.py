@@ -81,12 +81,18 @@ def create_riding(user_id, unique_id, riding_time, ave_speed, distance, starting
 )
 def get_riding_total(user_id):
     row = RidingTotal.get_by_user_id(user_id)
-    
-    return response_json_with_code(
-        total_time=row.total_time,
-        total_distance=row.total_distance,
-        count=row.count
-    )
+    if row:
+        return response_json_with_code(
+            total_time=row.total_time,
+            total_distance=row.total_distance,
+            count=row.count
+        )
+    else:
+        return response_json_with_code(
+            total_time="0",
+            total_distance="0",
+            count=0
+        )
 
 
 @auth_bp.route("/rall/<user_id>/<int:page>", methods=["GET"])
