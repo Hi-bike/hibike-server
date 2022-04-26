@@ -61,7 +61,7 @@ class RidingEach(db.Model):
             .order_by(RidingEach.riding_time.desc())\
             .slice(page, page+NUMBER_OF_INFO_PER_PAGE)\
             .all()
-        
+                    
     
 class RidingTotal(db.Model):
     __tablename__ = "riding_total"
@@ -69,9 +69,10 @@ class RidingTotal(db.Model):
     user_id = db.Column(db.String(30), nullable=False)
     total_time = db.Column(db.String(30), nullable=True)
     total_distance = db.Column(db.String(30), nullable=True)
+    count = db.Column(db.Integer, nullable=True)
     id = db.Column(db.Integer, primary_key = True)
     
-        
+
     @staticmethod
     def update(user_id, riding_time, distance):
         row = RidingTotal.get_by_user_id(user_id)
@@ -86,20 +87,19 @@ class RidingTotal(db.Model):
             
             row.total_time = str(total_minute + riding_minute) + " : " + str(total_second + riding_second)
             row.total_distance = float(row.total_distance) + float(distance)
-            
-            db.session.commit()
+            row.count += 1
         else:
             db.session.add(RidingTotal(
                 user_id=user_id,
                 total_time=riding_time,
-                total_distance=distance
+                total_distance=distance,
+                count=1
             ))
-            db.session.commit()
+            
+        db.session.commit()
             
     @staticmethod
     def get_by_user_id(user_id):
         return RidingTotal.query.filter(
             user_id==user_id
         ).first()
-    
-    

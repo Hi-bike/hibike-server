@@ -86,7 +86,8 @@ def get_riding_total(user_id):
         result={
             "total_time":row.total_time,
             "total_speed":row.total_speed,
-            "total_distance":row.total_distance
+            "total_distance":row.total_distance,
+            "count":row.count
         }
     )
 
