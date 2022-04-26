@@ -83,12 +83,9 @@ def get_riding_total(user_id):
     row = RidingTotal.get_by_user_id(user_id)
     
     return response_json_with_code(
-        result={
-            "total_time":row.total_time,
-            "total_speed":row.total_speed,
-            "total_distance":row.total_distance,
-            "count":row.count
-        }
+        total_time=row.total_time,
+        total_distance=row.total_distance,
+        count=row.count
     )
 
 
