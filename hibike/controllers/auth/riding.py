@@ -14,7 +14,7 @@ from hibike.utils.common import (
 )
 from datetime import datetime
 from pytz import timezone
-import os
+import os, json
 
 path = os.path.abspath("./hibike/static/image/riding")
 
@@ -126,7 +126,7 @@ def get_riding_all(user_id, page):
         })
             
     return response_json_with_code(
-        result=result,
+        result=json.dumps(result),
         is_last = "False"
     )
 
