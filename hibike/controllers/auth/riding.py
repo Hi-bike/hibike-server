@@ -111,7 +111,6 @@ def get_riding_all(user_id, page):
     if riding_rows == []:
         return response_json_with_code(
             result=result,
-            is_last = "True"
         )
     
     for row in riding_rows:
@@ -126,8 +125,7 @@ def get_riding_all(user_id, page):
         })
             
     return response_json_with_code(
-        result=json.dumps(result),
-        is_last = "False"
+        result=result,
     )
 
 
