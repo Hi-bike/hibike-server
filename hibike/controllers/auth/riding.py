@@ -1,3 +1,4 @@
+from flask import request, send_from_directory
 from flask_apispec import doc, use_kwargs
 from hibike import app, db
 from hibike.models.riding import RidingEach, RidingTotal
@@ -13,6 +14,9 @@ from hibike.utils.common import (
 )
 from datetime import datetime
 from pytz import timezone
+import os
+
+path = os.path.abspath("./hibike/static/image/riding")
 
 @auth_bp.route("/rone/<int:id>", methods=["GET"])
 @doc(
@@ -118,3 +122,40 @@ def get_riding_all(user_id, page):
         result=result,
         is_last = "False"
     )
+
+
+@auth_bp.route("/rimage", methods=["POST"])
+@doc(
+    tags=[API_CATEGORY],
+    summary="라이딩 결과 이미지",
+    description="라이딩 결과 이미지를 저장합니다.",
+    response={
+        200: {"description" : "success response"},
+        404: {"description" : "Not Found"}
+    }
+)
+def upload():
+    id = int(request.form.get("id"))
+    file = request.files.get("file")
+
+    if not file:
+        return response_json_with_code()
+    
+    filename = file.filename.split(".")
+    new_filename = f"{id}.{filename[1]}"
+    
+    full_path = os.path.join(path, new_filename)
+    file.save(full_path)
+
+    return response_json_with_code()
+
+
+@auth_bp.route("/rimage/<id>", methods=["GET"])
+@doc(
+    tags=[API_CATEGORY],
+    summary="riding image donwload",
+    description="image download"
+)
+def donwload(id):
+    abspath = os.path.abspath(path)
+    return send_from_directory(abspath, f"{id}.png")
