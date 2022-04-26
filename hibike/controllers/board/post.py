@@ -21,6 +21,9 @@ from datetime import datetime
 import time
 from pytz import timezone
 
+
+# TODO: 경로상 위험요소 탐색
+
 @board_bp.route("/posts/<int:page>", methods=["GET"])
 @doc(
     tags=[API_CATEGORY],
