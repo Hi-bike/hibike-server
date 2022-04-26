@@ -32,7 +32,9 @@ def get_riding_info_one(id):
             "user_id":row.user_id,
             "riding_time":row.riding_time,
             "ave_speed":row.ave_speed,
-            "distance":row.distance
+            "distance":row.distance,
+            "starting_point":row.starting_point,
+            "end_point":row.end_point
         }
     )
     
@@ -47,14 +49,14 @@ def get_riding_info_one(id):
                401: {"description" : "Unauthorized"},
     }
 )
-def create_riding(user_id, riding_time, ave_speed, distance, sp_lati, sp_long, ep_lati, ep_long):
+def create_riding(user_id, riding_time, ave_speed, distance, starting_point, end_point):
     KST = timezone('Asia/Seoul')
     time = datetime.now().astimezone(KST).strftime('%Y-%m-%d %H:%M:%S')
     
     RidingEach.create(
         user_id, riding_time, ave_speed, distance, time, 
-        sp_lati=sp_lati, sp_long=sp_long,
-        ep_lati=ep_lati, ep_long=ep_long
+        starting_point=starting_point,
+        end_point=end_point
     )
     
     RidingTotal.update(
