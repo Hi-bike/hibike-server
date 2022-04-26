@@ -148,13 +148,12 @@ def rupload():
     filename = file.filename.split(".")
     new_filename = f"{unique_id}.{filename[1]}"
     
-    row = RidingEach.get_one_by_unique_id(unique_id)
-    
-    if row:
+    # row = RidingEach.get_one_by_unique_id(unique_id)
+    # if row:
        
-        full_path = os.path.join(path, new_filename)
-        file.save(full_path)
-        row.image = new_filename
+    full_path = os.path.join(path, new_filename)
+    file.save(full_path)
+        # row.image = new_filename
         
     db.session.commit()
     return response_json_with_code()
@@ -167,9 +166,9 @@ def rupload():
     description="image download"
 )
 def rdonwload(unique_id):
-    row = RidingEach.get_one_by_unique_id(unique_id)
-    if row:
-        abspath = os.path.abspath(path)
-        return send_from_directory(abspath, f"{unique_id}.png")
+    # row = RidingEach.get_one_by_unique_id(unique_id)
+    # if row:
+    abspath = os.path.abspath(path)
+    return send_from_directory(abspath, f"{unique_id}.png")
     
-    return response_json_with_code()
+    # return response_json_with_code()
