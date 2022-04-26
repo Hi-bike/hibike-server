@@ -151,12 +151,12 @@ def rupload():
     row = RidingEach.get_one_by_unique_id(unique_id)
     
     if row:
-        row.image = new_filename
-        db.session.commit()
-        
+       
         full_path = os.path.join(path, new_filename)
         file.save(full_path)
-
+        row.image = new_filename
+        
+    db.session.commit()
     return response_json_with_code()
 
 
@@ -169,9 +169,7 @@ def rupload():
 def rdonwload(unique_id):
     row = RidingEach.get_one_by_unique_id(unique_id)
     if row:
-        image_name = row.image
-        
         abspath = os.path.abspath(path)
-        return send_from_directory(abspath, image_name)
+        return send_from_directory(abspath, f"{unique_id}.png")
     
     return response_json_with_code()
