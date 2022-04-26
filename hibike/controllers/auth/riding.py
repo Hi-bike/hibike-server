@@ -124,9 +124,7 @@ def get_riding_all(user_id, page):
             "unique_id": row.unique_id,
         })
             
-    return response_json_with_code(
-        result=result,
-    )
+    return result
 
 
 @auth_bp.route("/rimage", methods=["POST"])
