@@ -1,6 +1,6 @@
 from hibike import db, app
 
-NUMBER_OF_INFO_PER_PAGE = 8
+OFFSET = 15
 
 class RidingEach(db.Model):
     __tablename__ = "riding_each"
@@ -58,8 +58,8 @@ class RidingEach(db.Model):
     def get_all_by_page(user_id, page):
         return db.session.query(RidingEach)\
             .filter(RidingEach.user_id==user_id)\
-            .order_by(RidingEach.riding_time.desc())\
-            .slice(page, page+NUMBER_OF_INFO_PER_PAGE)\
+            .order_by(RidingEach.create_time.desc())\
+            .slice(page, page+OFFSET)\
             .all()
                     
     
