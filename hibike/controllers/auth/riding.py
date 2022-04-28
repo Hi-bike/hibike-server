@@ -38,8 +38,8 @@ def get_riding_info_one(id):
             "riding_time":row.riding_time,
             "ave_speed":row.ave_speed,
             "distance":row.distance,
-            "starting_point":row.starting_point,
-            "end_point":row.end_point
+            "starting_region":row.starting_region,
+            "end_region":row.end_region
         }
     )
     
@@ -89,7 +89,7 @@ def update_riding_region(region, kind, unique_id):
         if kind == "starting":
             row.starting_region = region
         else:
-            row.end_point_region = region
+            row.end_region = region
         db.session.commit()
         
     return response_json_with_code()
@@ -144,8 +144,8 @@ def get_riding_all(user_id, page):
             "distance": row.distance,
             "ave_speed": row.ave_speed,
             "riding_time": row.riding_time,
-            "starting_point": row.starting_point,
-            "end_point": row.end_point,
+            "starting_region": row.starting_region,
+            "end_region": row.end_region,
             "unique_id": row.unique_id,
         })
             
