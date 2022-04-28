@@ -58,11 +58,12 @@ def create_riding(user_id, unique_id, riding_time, ave_speed, distance): #, star
     KST = timezone('Asia/Seoul')
     time = datetime.now().astimezone(KST).strftime('%Y-%m-%d %H:%M:%S')
     
+    if riding_time == "nan" and distance == "nan":
+        return response_json_with_code()
+    
     RidingEach.create(
         user_id, unique_id, riding_time, ave_speed, distance, time
     )
-    
-    # TODO: 시간 계산
     
     RidingTotal.update(
         user_id, riding_time, distance

@@ -83,7 +83,13 @@ class RidingTotal(db.Model):
             riding_minute = int(splited_time[0])
             riding_second = int(splited_time[1])
             
-            row.total_time = str(total_minute + riding_minute) + " : " + str(total_second + riding_second)
+            secend = total_second + riding_second
+            minute = total_minute + riding_minute
+            if secend > 60:
+                secend -= 60
+                minute += 1
+                
+            row.total_time = str(minute) + " : " + str(secend)
             row.total_distance = float(row.total_distance) + float(distance)
             row.count += 1
         else:
