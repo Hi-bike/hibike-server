@@ -8,6 +8,7 @@ from hibike.controllers.auth import (
 )
 from hibike.schema.user import (
     RequestRidingEachSchema,
+    RequestRidingRegionSchema
 )
 from hibike.utils.common import (
     response_json_with_code,
@@ -53,20 +54,44 @@ def get_riding_info_one(id):
                401: {"description" : "Unauthorized"},
     }
 )
-def create_riding(user_id, unique_id, riding_time, ave_speed, distance, starting_point, end_point):
+def create_riding(user_id, unique_id, riding_time, ave_speed, distance): #, starting_point, end_point):
     KST = timezone('Asia/Seoul')
     time = datetime.now().astimezone(KST).strftime('%Y-%m-%d %H:%M:%S')
     
     RidingEach.create(
         user_id, unique_id, riding_time, ave_speed, distance, time, 
-        starting_point=starting_point,
-        end_point=end_point
+        # starting_point=starting_point,
+        # end_point=end_point
     )
+    
+    # TODO: 시간 계산
     
     RidingTotal.update(
         user_id, riding_time, distance
     )
     
+    return response_json_with_code()
+
+    
+@auth_bp.route("/riding-region", methods=["POST"])
+@use_kwargs(RequestRidingRegionSchema)
+@doc(
+    tags=[API_CATEGORY],
+    summary="라이딩 지역 정보 저장",
+    description="라이딩 정보 저장.",
+    responses={200: {"description" : "success response"},
+               401: {"description" : "Unauthorized"},
+    }
+)
+def update_riding_region(region, kind, unique_id):
+    row = RidingEach.get_one_by_unique_id(unique_id)
+    if row:
+        if kind == "starting":
+            row.starting_region = region
+        else:
+            row.end_point_region = region
+        db.session.commit()
+        
     return response_json_with_code()
 
 

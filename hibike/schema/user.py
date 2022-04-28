@@ -83,5 +83,9 @@ class RequestRidingEachSchema(Schema):
       riding_time = fields.Str(description="주행 시간", required=True)
       ave_speed = fields.Str(description="평균 속도", required=True)
       distance = fields.Str(description="평균 거리", required=True)
-      starting_point = fields.Str(description="출발지", required=True)
-      end_point = fields.Str(description="도착지", required=True)
+      
+class RequestRidingRegionSchema(Schema):
+      region = fields.Str(description="지역", required=True)
+      kind = fields.Str(description="종류", required=True)
+      unique_id = fields.Str(description="라이딩 유니크 아이디", required=True)
+      
