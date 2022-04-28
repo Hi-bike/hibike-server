@@ -59,9 +59,7 @@ def create_riding(user_id, unique_id, riding_time, ave_speed, distance): #, star
     time = datetime.now().astimezone(KST).strftime('%Y-%m-%d %H:%M:%S')
     
     RidingEach.create(
-        user_id, unique_id, riding_time, ave_speed, distance, time, 
-        # starting_point=starting_point,
-        # end_point=end_point
+        user_id, unique_id, riding_time, ave_speed, distance, time
     )
     
     # TODO: 시간 계산
@@ -73,7 +71,7 @@ def create_riding(user_id, unique_id, riding_time, ave_speed, distance): #, star
     return response_json_with_code()
 
     
-@auth_bp.route("/riding-region", methods=["POST"])
+@auth_bp.route("/sregion", methods=["POST"])
 @use_kwargs(RequestRidingRegionSchema)
 @doc(
     tags=[API_CATEGORY],
@@ -83,13 +81,28 @@ def create_riding(user_id, unique_id, riding_time, ave_speed, distance): #, star
                401: {"description" : "Unauthorized"},
     }
 )
-def update_riding_region(region, kind, unique_id):
+def update_riding_sregion(region, unique_id):
     row = RidingEach.get_one_by_unique_id(unique_id)
     if row:
-        if kind == "starting":
-            row.starting_region = region
-        else:
-            row.end_region = region
+        row.starting_region = region
+        db.session.commit()
+        
+    return response_json_with_code()
+
+@auth_bp.route("/eregion", methods=["POST"])
+@use_kwargs(RequestRidingRegionSchema)
+@doc(
+    tags=[API_CATEGORY],
+    summary="라이딩 지역 정보 저장",
+    description="라이딩 정보 저장.",
+    responses={200: {"description" : "success response"},
+               401: {"description" : "Unauthorized"},
+    }
+)
+def update_riding_eregion(region, unique_id):
+    row = RidingEach.get_one_by_unique_id(unique_id)
+    if row:
+        row.end_region = region
         db.session.commit()
         
     return response_json_with_code()

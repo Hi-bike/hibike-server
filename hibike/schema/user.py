@@ -86,6 +86,5 @@ class RequestRidingEachSchema(Schema):
       
 class RequestRidingRegionSchema(Schema):
       region = fields.Str(description="지역", required=True)
-      kind = fields.Str(description="종류", required=True)
       unique_id = fields.Str(description="라이딩 유니크 아이디", required=True)
       
