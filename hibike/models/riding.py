@@ -30,25 +30,25 @@ class RidingEach(db.Model):
                 
     @staticmethod
     def get_one_by_id(id):
-        return RidingEach.query.filter(
+        return db.session.query(RidingEach).filter_by(
             id==id
         ).first()
         
     @staticmethod
     def get_one_by_unique_id(unique_id):
-        return RidingEach.query.filter(
+        return db.session.query(RidingEach).filter_by(
             unique_id==unique_id
         ).first()
     
     @staticmethod
     def get_one_by_user_id(user_id):
-        return RidingEach.query.filter(
+        return db.session.query(RidingEach).filter_by(
             user_id==user_id
-        ).one_or_none()
+        ).first()
     
     @staticmethod
     def get_all_by_user_id(user_id):
-        return RidingEach.query.filter(
+        return db.session.query(RidingEach).filter_by(
             user_id==user_id
         ).all()
     
@@ -104,6 +104,6 @@ class RidingTotal(db.Model):
             
     @staticmethod
     def get_by_user_id(user_id):
-        return RidingTotal.query.filter(
+        return db.session.query(RidingTotal).filter_by(
             user_id==user_id
         ).first()

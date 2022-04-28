@@ -86,7 +86,6 @@ def update_riding_sregion(region, unique_id):
     row = RidingEach.get_one_by_unique_id(unique_id)
     if row:
         row.starting_region = region
-        print(region)
         db.session.commit()
         return response_json_with_code()
         
@@ -107,7 +106,6 @@ def update_riding_eregion(region, unique_id):
     row = RidingEach.get_one_by_unique_id(unique_id)
     if row:
         row.end_region = region
-        print(region)
         db.session.commit()
         return response_json_with_code()
 
