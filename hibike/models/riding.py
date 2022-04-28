@@ -104,6 +104,6 @@ class RidingTotal(db.Model):
             
     @staticmethod
     def get_by_user_id(user_id):
-        return db.session.query(RidingTotal).filter_by(
+        return RidingTotal.query.filter(
             user_id==user_id
         ).first()
