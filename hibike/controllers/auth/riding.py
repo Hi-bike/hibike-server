@@ -19,7 +19,7 @@ import os, json
 
 path = os.path.abspath("./hibike/static/image/riding")
 
-@auth_bp.route("/rone/<int:id>", methods=["GET"])
+@auth_bp.route("/rone/<unique_id>", methods=["GET"])
 @doc(
     tags=[API_CATEGORY],
     summary="라이딩 정보 하나 반환",
@@ -28,12 +28,12 @@ path = os.path.abspath("./hibike/static/image/riding")
                401: {"description" : "Unauthorized"},
     }
 )
-def get_riding_info_one(id):
-    row = RidingEach.get_one_by_id(id)
+def get_riding_info_one(unique_id):
+    row = RidingEach.get_one_by_unique_id(unique_id)
     
     return response_json_with_code(
         result={
-            "id":row.id,
+            "create_time":row.create_time,
             "user_id":row.user_id,
             "riding_time":row.riding_time,
             "ave_speed":row.ave_speed,
