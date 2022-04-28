@@ -87,8 +87,10 @@ def update_riding_sregion(region, unique_id):
     if row:
         row.starting_region = region
         db.session.commit()
+        return response_json_with_code()
         
-    return response_json_with_code()
+    return response_json_with_code(401)
+        
 
 @auth_bp.route("/eregion", methods=["POST"])
 @use_kwargs(RequestRidingRegionSchema)
@@ -105,8 +107,11 @@ def update_riding_eregion(region, unique_id):
     if row:
         row.end_region = region
         db.session.commit()
+        return response_json_with_code()
+
+    return response_json_with_code(401)
         
-    return response_json_with_code()
+    
 
 
 @auth_bp.route("/rtotal/<user_id>", methods=["GET"])
