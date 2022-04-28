@@ -19,6 +19,7 @@ import os, json
 
 path = os.path.abspath("./hibike/static/image/riding")
 
+
 @auth_bp.route("/rone/<unique_id>", methods=["GET"])
 @doc(
     tags=[API_CATEGORY],
@@ -56,7 +57,7 @@ def get_riding_info_one(unique_id):
 )
 def create_riding(user_id, unique_id, riding_time, ave_speed, distance): #, starting_point, end_point):
     KST = timezone('Asia/Seoul')
-    time = datetime.now().astimezone(KST).strftime('%Y-%m-%d %H:%M:%S')
+    time = datetime.now().astimezone(KST).strftime('%Y-%m-%d')
     
     if riding_time == "nan" and distance == "nan":
         return response_json_with_code()
