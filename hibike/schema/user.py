@@ -87,4 +87,10 @@ class RequestRidingEachSchema(Schema):
 class RequestRidingRegionSchema(Schema):
       region = fields.Str(description="지역", required=True)
       unique_id = fields.Str(description="라이딩 유니크 아이디", required=True)
-      
+
+class RequestPostDangerSchema(Schema):
+      id = fields.Str(description="유저 아이디", required=True)
+      title = fields.Str(description="제목", required=True)
+      contents = fields.Str(description="내용", required=True)
+      latitude = fields.Float(description="위도", required=True)
+      longitude = fields.Float(description="경도", required=True)

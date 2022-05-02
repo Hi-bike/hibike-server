@@ -9,9 +9,6 @@ class Danger(db.Model):
     latitude = db.Column(db.Float(50), nullable=False)
     longitude = db.Column(db.Float(50), nullable=False)
     time = db.Column(db.DateTime)
-    update_nickname = db.Column(db.Integer, nullable=True)
-    update_time = db.Column(db.DateTime, nullable=True)
-    danger_type = db.Column(db.String(30), nullable=True)
     is_delete = db.Column(db.String(1), default="N")
     id = db.Column(db.Integer, primary_key = True)
 

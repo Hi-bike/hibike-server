@@ -12,6 +12,9 @@ from hibike.controllers.board import (
 from hibike.utils.common import (
     response_json_with_code,
 )
+from hibike.schema.user import (
+    RequestPostDangerSchema
+)
 import requests
 import json
 from datetime import datetime
@@ -28,11 +31,22 @@ from pytz import timezone
     }
 )
 def get_danger():
-    danger_list = [37.504766,126.751009]
+    danger_list = []
     range_list = []
+    db_latitude = []
+    db_longitude = []
     ranges = request.form.get('ranges')
     len_range = ranges.count(",") + 1
     is_included = False
+    danger_row = db.session.query(Danger).all()
+    if danger_row == []:
+        return response_json_with_code(
+            danger_list = danger_list
+        )
+    for row in danger_row:
+        db_latitude.append(row.latitude)
+        db_longitude.append(row.longitude)
+
     for i in range(len_range):
         range_list.append(float(ranges.split(",")[i]))
     
@@ -48,12 +62,42 @@ def get_danger():
         latitude_list = sorted(latitude_list, reverse=False)
         longitude_list = sorted(longitude_list, reverse=False)
 
-        if latitude_list[0] < danger_list[0] and latitude_list[3] > danger_list[0] and longitude_list[0] < danger_list[1] and longitude_list[3] > danger_list[1]:
-            is_included = True
+
+        for j in range(len(db_latitude)):
+            if latitude_list[0] < db_latitude[j] and latitude_list[3] > db_latitude[j] and longitude_list[0] < db_longitude[j] and longitude_list[3] > db_longitude[j]:
+                if db_latitude[j] not in danger_list and db_longitude[j] not in danger_list:
+                    danger_list.append(db_latitude[j])
+                    danger_list.append(db_longitude[j])
 
     return response_json_with_code(
-        danger_list = danger_list,
-        latitude_list = latitude_list,
-        longitude_list = longitude_list,
-        is_included = is_included
+        danger_list = danger_list
+    )
+
+@board_bp.route("/post-danger", methods=["POST"])
+@use_kwargs(RequestPostDangerSchema)
+@doc(
+    tags=[API_CATEGORY],
+    summary="위험지역 등록",
+    description="위험지역 등록",
+    responses={200: {"description" : "success response"},
+               401: {"description" : "Unauthorized"},
+    }
+)
+def post_danger(id, title, contents, latitude, longitude):
+    user_row = db.session.query(User).filter(User.id == id).first()
+    KST = timezone('Asia/Seoul')
+    time = datetime.now().astimezone(KST).strftime('%Y-%m-%d %H:%M:%S')
+
+    db.session.add(Danger(
+        title=title,
+        contents=contents,
+        nickname = user_row.nickname,
+        latitude = latitude,
+        longitude = longitude,
+        time=time
+    ))
+    db.session.commit()
+
+    return response_json_with_code(
+        result="Success"
     )
