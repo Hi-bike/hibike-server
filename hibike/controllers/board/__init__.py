@@ -19,4 +19,5 @@ authorization_header = {
 }
 
 from hibike.controllers.board.post import *
+from hibike.controllers.board.danger import *
 
