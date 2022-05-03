@@ -37,7 +37,7 @@ def get_danger():
     db_longitude = []
     ranges = request.form.get('ranges')
     len_range = ranges.count(",") + 1
-    is_included = False
+    
     danger_row = db.session.query(Danger).all()
     if danger_row == []:
         return response_json_with_code(
@@ -59,12 +59,8 @@ def get_danger():
             else:
                 longitude_list.append(range_list[j])
 
-        latitude_list = sorted(latitude_list, reverse=False)
-        longitude_list = sorted(longitude_list, reverse=False)
-
-
         for j in range(len(db_latitude)):
-            if latitude_list[0] < db_latitude[j] and latitude_list[3] > db_latitude[j] and longitude_list[0] < db_longitude[j] and longitude_list[3] > db_longitude[j]:
+            if min(latitude_list) <= db_latitude[j] and max(latitude_list) >= db_latitude[j] and min(longitude_list) <= db_longitude[j] and max(longitude_list) >= db_longitude[j]:
                 if db_latitude[j] not in danger_list and db_longitude[j] not in danger_list:
                     danger_list.append(db_latitude[j])
                     danger_list.append(db_longitude[j])
