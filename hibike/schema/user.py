@@ -94,3 +94,6 @@ class RequestPostDangerSchema(Schema):
       contents = fields.Str(description="내용", required=True)
       latitude = fields.Float(description="위도", required=True)
       longitude = fields.Float(description="경도", required=True)
+
+class RequestDangerRangeSchema(Schema):
+      danger_range = fields.List(fields.List(fields.Float,description="위험지역 탐색 범위 리스트", required=True))
