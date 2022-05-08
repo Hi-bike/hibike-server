@@ -14,7 +14,8 @@ from hibike.utils.common import (
 )
 from hibike.schema.user import (
     RequestPostDangerSchema,
-    RequestDangerRangeSchema
+    RequestDangerRangeSchema,
+    RequestDangerInformationSchema
 )
 import requests
 import json
@@ -102,4 +103,34 @@ def post_danger(id, title, contents, latitude, longitude):
 
     return response_json_with_code(
         result="Success"
+    )
+
+@board_bp.route("/danger-info", methods=["POST"])
+@use_kwargs(RequestDangerInformationSchema)
+@doc(
+    tags=[API_CATEGORY],
+    summary="위험지역 상세정보",
+    description="위험지역 상세정보",
+    responses={200: {"description" : "success response"},
+               401: {"description" : "Unauthorized"},
+    }
+)
+def post_danger(latitude, longitude):
+    danger_row = db.session.query(Danger).filter((Danger.latitude == latitude) and (Danger.latitude == longitude)).first()
+    if not danger_row:
+        return response_json_with_code(
+            401,
+            result = "no data"
+        )
+    res = {
+        "nickname" : danger_row.nickname,
+        "title" : danger_row.title,
+        "contents" : danger_row.contents,
+        "latitude" : danger_row.latitude,
+        "longitude" : danger_row.longitude,
+        "time" : danger_row.time,
+    }
+
+    return response_json_with_code(
+        result = res
     )
