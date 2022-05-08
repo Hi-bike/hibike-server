@@ -14,17 +14,21 @@ class RidingEach(db.Model):
     end_region = db.Column(db.String(30), default="") #도착지
     image = db.Column(db.String(30), nullable=True)
     unique_id = db.Column(db.String(30), nullable=True)
+    count = db.Column(db.Integer, default=0)
     id = db.Column(db.Integer, primary_key = True)
     
     @staticmethod
     def create(user_id, unique_id, riding_time, ave_speed, distance, create_time):
+        count = RidingEach.query.filter(RidingEach.user_id==user_id).count()
+        
         db.session.add(RidingEach(
             user_id=user_id,
             unique_id=unique_id,
             riding_time=riding_time,
             ave_speed=ave_speed,
             distance=distance,
-            create_time=create_time
+            create_time=create_time,
+            count=count+1
         ))
         db.session.commit()
                 
@@ -67,7 +71,6 @@ class RidingTotal(db.Model):
     user_id = db.Column(db.String(30), nullable=False)
     total_time = db.Column(db.String(30), nullable=True)
     total_distance = db.Column(db.String(30), nullable=True)
-    count = db.Column(db.Integer, nullable=True)
     id = db.Column(db.Integer, primary_key = True)
     
 
@@ -91,13 +94,11 @@ class RidingTotal(db.Model):
                 
             row.total_time = str(minute) + " : " + str(secend)
             row.total_distance = float(row.total_distance) + float(distance)
-            row.count += 1
         else:
             db.session.add(RidingTotal(
                 user_id=user_id,
                 total_time=riding_time,
                 total_distance=distance,
-                count=1
             ))
             
         db.session.commit()

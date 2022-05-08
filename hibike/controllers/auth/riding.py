@@ -167,6 +167,7 @@ def get_riding_all(user_id, page):
             "starting_region": row.starting_region,
             "end_region": row.end_region,
             "unique_id": row.unique_id,
+            "count":row.count
         })
             
     return response_json_with_code(result=result)
