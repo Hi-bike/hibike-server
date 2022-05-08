@@ -115,7 +115,7 @@ def post_danger(id, title, contents, latitude, longitude):
                401: {"description" : "Unauthorized"},
     }
 )
-def post_danger(latitude, longitude):
+def get_danger_info(latitude, longitude):
     danger_row = db.session.query(Danger).filter((Danger.latitude == latitude) and (Danger.latitude == longitude)).first()
     if not danger_row:
         return response_json_with_code(
