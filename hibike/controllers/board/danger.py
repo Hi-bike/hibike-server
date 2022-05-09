@@ -17,11 +17,12 @@ from hibike.schema.user import (
     RequestDangerRangeSchema,
     RequestDangerInformationSchema
 )
-import requests
-import json
+import json, os
 from datetime import datetime
-import time
+import time as t
 from pytz import timezone
+
+path = os.path.abspath("./hibike/static/image/danger")
 
 @board_bp.route("/danger", methods=["POST"])
 @use_kwargs(RequestDangerRangeSchema)
@@ -77,7 +78,6 @@ def get_danger(danger_range):
     )
 
 @board_bp.route("/post-danger", methods=["POST"])
-@use_kwargs(RequestPostDangerSchema)
 @doc(
     tags=[API_CATEGORY],
     summary="위험지역 등록",
@@ -86,10 +86,33 @@ def get_danger(danger_range):
                401: {"description" : "Unauthorized"},
     }
 )
-def post_danger(id, title, contents, latitude, longitude, image, region, region_detail, period):
+def post_danger():
+    id = request.form.get("id")
+    title = request.form.get("title")
+    contents = request.form.get("contents")
+    latitude = request.form.get("latitude")
+    longitude = request.form.get("longitude")
+    region = request.form.get("region")
+    region_detail = request.form.get("region_detail")
+    period = request.form.get("period")
+    image = request.files.get("file")
+    
+    latitude = float(latitude)
+    longitude = float(longitude)
+    period = int(period)
+    
+    image_name = ""
+    
     user_row = db.session.query(User).filter(User.id == id).first()
     KST = timezone('Asia/Seoul')
     time = datetime.now().astimezone(KST).strftime('%Y-%m-%d %H:%M:%S')
+    if image:
+        now_time = int(t.time())
+        root, ext = os.path.splitext(image.filename)
+        image_name = f"{now_time}{ext}"
+        
+        full_path = os.path.join(path, image_name)
+        image.save(full_path)
     
     db.session.add(Danger(
         title=title,
@@ -98,7 +121,7 @@ def post_danger(id, title, contents, latitude, longitude, image, region, region_
         latitude = latitude,
         longitude = longitude,
         time=time,
-        image=image,
+        image=image_name,
         region=region,
         region_detail=region_detail,
         period=period,
@@ -133,6 +156,10 @@ def get_danger_info(latitude, longitude):
         "latitude" : danger_row.latitude,
         "longitude" : danger_row.longitude,
         "time" : danger_row.time,
+        "image" : danger_row.image,
+        "region" : danger_row.region,
+        "region_detail" : danger_row.region_detail,
+        "period" : danger_row.period,
     }
 
     return response_json_with_code(
