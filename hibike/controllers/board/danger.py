@@ -107,10 +107,7 @@ def post_danger():
     KST = timezone('Asia/Seoul')
     time = datetime.now().astimezone(KST).strftime('%Y-%m-%d %H:%M:%S')
     if image:
-        now_time = int(t.time())
-        root, ext = os.path.splitext(image.filename)
-        image_name = f"{now_time}{ext}"
-        
+        image_name = image.filename
         full_path = os.path.join(path, image_name)
         image.save(full_path)
     
