@@ -14,7 +14,7 @@ class Danger(db.Model):
     image = db.Column(db.String(50), nullable=True)
     region = db.Column(db.String(50), nullable=False)
     region_detail = db.Column(db.String(50), nullable=False)
-    period = db.Column(db.Inter, default=15)
+    period = db.Column(db.Integer, default=15)
     id = db.Column(db.Integer, primary_key = True)
 
 class Board(db.Model):
