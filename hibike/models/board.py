@@ -1,3 +1,4 @@
+from email.policy import default
 from hibike import db, app
 
 class Danger(db.Model):
@@ -10,6 +11,10 @@ class Danger(db.Model):
     longitude = db.Column(db.Float(50), nullable=False)
     time = db.Column(db.DateTime)
     is_delete = db.Column(db.String(1), default="N")
+    image = db.Column(db.String(50), nullable=True)
+    region = db.Column(db.String(50), nullable=False)
+    region_detail = db.Column(db.String(50), nullable=False)
+    period = db.Column(db.Inter, default=15)
     id = db.Column(db.Integer, primary_key = True)
 
 class Board(db.Model):

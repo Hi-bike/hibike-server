@@ -85,18 +85,22 @@ def get_danger(danger_range):
                401: {"description" : "Unauthorized"},
     }
 )
-def post_danger(id, title, contents, latitude, longitude):
+def post_danger(id, title, contents, latitude, longitude, image, region, region_detail, period):
     user_row = db.session.query(User).filter(User.id == id).first()
     KST = timezone('Asia/Seoul')
     time = datetime.now().astimezone(KST).strftime('%Y-%m-%d %H:%M:%S')
-
+    
     db.session.add(Danger(
         title=title,
         contents=contents,
         nickname = user_row.nickname,
         latitude = latitude,
         longitude = longitude,
-        time=time
+        time=time,
+        image=image,
+        region=region,
+        region_detail=region_detail,
+        period=period,
     ))
     db.session.commit()
 
