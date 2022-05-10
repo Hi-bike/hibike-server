@@ -196,7 +196,7 @@ def del_my_danger(user_id,latitude,longitude):
                 tmp_latitude.append(row.southwest_lati)
                 tmp_longitude.append(row.northeast_long)
                 tmp_longitude.append(row.southwest_long)
-                if (min(tmp_latitude) <= latitude) and (latitude >= max(tmp_latitude)) and (min(longitude) <= longitude) and (longitude >= max(longitude)):
+                if (min(tmp_latitude) <= latitude) and (latitude <= max(tmp_latitude)) and (min(longitude) <= longitude) and (longitude <= max(longitude)):
                     danger_row = danger_row = db.session.query(Danger).filter((Danger.latitude == latitude) & (Danger.longitude == longitude)).first()
                     danger_row.is_delete = 'Y'
                     db.session.commit()
