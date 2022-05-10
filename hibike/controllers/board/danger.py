@@ -1,5 +1,4 @@
-from pstats import SortKey
-from flask import request, session
+from flask import request, session, send_from_directory
 from flask_apispec import doc, use_kwargs
 from hibike import app, db
 from hibike.models.board import Board,Reply,Danger
@@ -13,12 +12,11 @@ from hibike.utils.common import (
     response_json_with_code,
 )
 from hibike.schema.user import (
-    RequestPostDangerSchema,
     RequestDangerRangeSchema,
     RequestDangerInformationSchema,
     RequestDeleteDanger,
 )
-import json, os
+import  os
 from datetime import datetime
 import time as t
 from pytz import timezone
@@ -182,4 +180,16 @@ def del_my_danger(nickname,latitude,longitude):
         return response_json_with_code(result = "success")
     else:
         return response_json_with_code(401, result = "fail")
-    
+
+
+@board_bp.route("/dimage/<filename>", methods=["GET"])
+@doc(
+    tags=[API_CATEGORY],
+    summary="riding image donwload",
+    description="image download"
+)
+def ddonwload(filename):
+    # row = RidingEach.get_one_by_unique_id(unique_id)
+    # if row:
+    abspath = os.path.abspath(path)
+    return send_from_directory(abspath, filename)
