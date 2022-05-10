@@ -15,7 +15,8 @@ from hibike.utils.common import (
 from hibike.schema.user import (
     RequestPostDangerSchema,
     RequestDangerRangeSchema,
-    RequestDangerInformationSchema
+    RequestDangerInformationSchema,
+    RequestDeleteDanger,
 )
 import json, os
 from datetime import datetime
@@ -162,3 +163,23 @@ def get_danger_info(latitude, longitude):
     return response_json_with_code(
         result = res
     )
+
+@board_bp.route("/delete-danger", methods=["POST"])
+@use_kwargs(RequestDeleteDanger)
+@doc(
+    tags=[API_CATEGORY],
+    summary="등록한 위험지역 삭제",
+    description="등록한 위험지역 삭제",
+    responses={200: {"description" : "success response"},
+               401: {"description" : "Unauthorized"},
+    }
+)
+def del_my_danger(nickname,latitude,longitude):
+    danger_row = db.session.query(Danger).filter((Danger.nickname == nickname) & (Danger.latitude == latitude) & (Danger.longitude == longitude)).first()
+    if danger_row: #본인이 등록한 경우
+        danger_row.is_delete = 'Y'
+        db.session.commit()
+        return response_json_with_code(result = "success")
+    else:
+        return response_json_with_code(401, result = "fail")
+    
