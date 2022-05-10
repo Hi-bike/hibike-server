@@ -107,6 +107,6 @@ class RequestDangerInformationSchema(Schema):
       longitude = fields.Float(description="경도", required=True)
 
 class RequestDeleteDanger(Schema):
-      nickname = fields.Str(description="닉네임", required=True)
+      user_id = fields.Str(description="유저 id", required=True)
       latitude = fields.Float(description="위도", required=True)
       longitude = fields.Float(description="경도", required=True)
