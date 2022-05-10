@@ -176,7 +176,7 @@ def get_danger_info(latitude, longitude):
 )
 def del_my_danger(nickname,latitude,longitude):
     danger_row = db.session.query(Danger).filter((Danger.nickname == nickname) & (Danger.latitude == latitude) & (Danger.longitude == longitude)).first()
-    if danger_row:
+    if danger_row: #본인이 등록한 경우
         danger_row.is_delete = 'Y'
         db.session.commit()
         return response_json_with_code(result = "success")
