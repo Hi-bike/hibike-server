@@ -266,7 +266,8 @@ def rupload():
 def rdonwload(unique_id):
     # row = RidingEach.get_one_by_unique_id(unique_id)
     # if row:
+    row = RidingEach.get_one_by_unique_id(unique_id)
     abspath = os.path.abspath(path)
-    return send_from_directory(abspath, f"{unique_id}.png")
+    return send_from_directory(abspath, row.image)
     
     # return response_json_with_code()
