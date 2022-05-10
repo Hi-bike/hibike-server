@@ -15,6 +15,10 @@ class RidingEach(db.Model):
     image = db.Column(db.String(30), nullable=True)
     unique_id = db.Column(db.String(30), nullable=True)
     count = db.Column(db.Integer, default=0)
+    northeast_lati = db.Column(db.Float(50), nullable=True)
+    northeast_long = db.Column(db.Float(50), nullable=True)
+    southwest_lati = db.Column(db.Float(50), nullable=True)
+    southwest_long = db.Column(db.Float(50), nullable=True)
     id = db.Column(db.Integer, primary_key = True)
     
     @staticmethod
@@ -27,6 +31,29 @@ class RidingEach(db.Model):
             riding_time=riding_time,
             ave_speed=ave_speed,
             distance=distance,
+            create_time=create_time,
+            count=count+1
+        ))
+        db.session.commit()
+        
+    @staticmethod
+    def multi_create(user_id, unique_id, riding_time, ave_speed, distance
+                    ,starting_region, end_region, northeast_lati, northeast_long, southwest_lati, southwest_long, image, create_time):
+        count = RidingEach.query.filter(RidingEach.user_id==user_id).count()
+        
+        db.session.add(RidingEach(
+            user_id=user_id,
+            unique_id=unique_id,
+            riding_time=riding_time,
+            ave_speed=ave_speed,
+            distance=distance,
+            starting_region=starting_region,
+            end_region=end_region,
+            northeast_lati=northeast_lati,
+            northeast_long=northeast_long,
+            southwest_lati=southwest_lati,
+            southwest_long=southwest_long,
+            image=image,
             create_time=create_time,
             count=count+1
         ))

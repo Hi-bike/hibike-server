@@ -72,6 +72,61 @@ def create_riding(user_id, unique_id, riding_time, ave_speed, distance): #, star
     
     return response_json_with_code()
 
+@auth_bp.route("/rmulti", methods=["POST"])
+@doc(
+    tags=[API_CATEGORY],
+    summary="라이딩 저장",
+    description="라이딩 정보 저장.",
+    responses={200: {"description" : "success response"},
+               401: {"description" : "Unauthorized"},
+    }
+)
+def create_multi_riding():
+    user_id = request.form.get("user_id")
+    unique_id = request.form.get("unique_id")
+    riding_time = request.form.get("riding_time")
+    ave_speed = request.form.get("ave_speed")
+    distance = request.form.get("distance")
+    starting_region = request.form.get("starting_region")
+    end_region = request.form.get("end_region")
+    northeast_lati = request.form.get("northeastward_lati")
+    northeast_long = request.form.get("northeastward_long")
+    southwest_lati = request.form.get("southwest_lati")
+    southwest_long = request.form.get("southwest_long")
+    file = request.files.get("file")
+    
+    new_filename = ""
+    northeast_lati = float(northeast_lati)
+    northeast_long = float(northeast_long)
+    southwest_lati = float(southwest_lati)
+    southwest_long = float(southwest_long)
+    
+    KST = timezone('Asia/Seoul')
+    create_time = datetime.now().astimezone(KST).strftime('%Y-%m-%d %H:%M:%S')
+    
+    if file:
+        filename = file.filename.split(".")
+        new_filename = f"{unique_id}.{filename[1]}"
+        
+        full_path = os.path.join(path, new_filename)
+        file.save(full_path)
+    
+    
+    RidingEach.multi_create(user_id=user_id, unique_id=unique_id, riding_time=riding_time, ave_speed=ave_speed, distance=distance,
+        starting_region=starting_region, end_region=end_region, northeast_lati=northeast_lati, northeast_long=northeast_long, 
+        southwest_lati=southwest_lati, southwest_long=southwest_long,
+        image=new_filename, create_time=create_time
+    )
+    
+    
+    RidingTotal.update(
+        user_id, riding_time, distance
+    )
+    
+    return response_json_with_code(
+        result="success"
+    )
+
     
 @auth_bp.route("/sregion", methods=["POST"])
 @use_kwargs(RequestRidingRegionSchema)
