@@ -8,6 +8,7 @@ from hibike.controllers.board import (
     API_CATEGORY,
     board_bp
 )
+from hibike.models.riding import RidingEach
 from hibike.utils.common import (
     response_json_with_code,
 )
@@ -40,7 +41,7 @@ def get_danger(danger_range):
     db_longitude = []
     count_list = []
     tmp_danger_list = []
-    danger_row = db.session.query(Danger).all()
+    danger_row = db.session.query(Danger).filter(Danger.is_delete == 'N').all()
     if danger_row == []:
         return response_json_with_code(
             danger_list = danger_list
@@ -172,16 +173,35 @@ def get_danger_info(latitude, longitude):
                401: {"description" : "Unauthorized"},
     }
 )
-def del_my_danger(nickname,latitude,longitude):
+def del_my_danger(user_id,latitude,longitude):
+    user_row = db.session.query(User).filter(User.id == user_id).first()
+    nickname = user_row.nickname
+
     danger_row = db.session.query(Danger).filter((Danger.nickname == nickname) & (Danger.latitude == latitude) & (Danger.longitude == longitude)).first()
     if danger_row: #본인이 등록한 경우
         danger_row.is_delete = 'Y'
         db.session.commit()
         return response_json_with_code(result = "success")
     else:
-        return response_json_with_code(401, result = "fail")
-
-
+        riding_row = db.session.query(RidingEach).filter(RidingEach.user_id == user_id).all()
+        if riding_row == []:
+            return response_json_with_code(401, result = "fail")
+        else:
+            for row in riding_row:
+                tmp_latitude = []
+                tmp_longitude = []
+                tmp_latitude.append(row.northeast_lati)
+                tmp_latitude.append(row.southwest_lati)
+                tmp_longitude.append(row.northeast_long)
+                tmp_longitude.append(row.southwest_long)
+                if (min(tmp_latitude) <= latitude) and (latitude <= max(tmp_latitude)) and (min(longitude) <= longitude) and (longitude <= max(longitude)):
+                    danger_row = danger_row = db.session.query(Danger).filter((Danger.latitude == latitude) & (Danger.longitude == longitude)).first()
+                    danger_row.is_delete = 'Y'
+                    db.session.commit()
+                    return response_json_with_code(result = "success")
+            return response_json_with_code(401, result = "fail")
+    
+    
 @board_bp.route("/dimage/<filename>", methods=["GET"])
 @doc(
     tags=[API_CATEGORY],
