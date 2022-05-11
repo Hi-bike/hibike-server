@@ -16,7 +16,8 @@ from hibike.schema.user import (
     RequestDangerRangeSchema,
     RequestDangerInformationSchema,
     RequestDeleteDanger,
-    RequestMyDanger
+    RequestMyDanger,
+    RequestDeleteNearDanger
 )
 import  os
 from datetime import datetime
@@ -244,3 +245,21 @@ def get_my_danger(user_id, page):
         result=result,
         is_last = "False"
     )
+
+@board_bp.route("/delete-near-danger", methods=["POST"])
+@use_kwargs(RequestDeleteNearDanger)
+@doc(
+    tags=[API_CATEGORY],
+    summary="현재 위치 근처의 위험지역 삭제",
+    description="현재 위치 근처의 위험지역 삭제",
+    responses={200: {"description" : "success response"},
+               401: {"description" : "Unauthorized"},
+    }
+)
+def del_near_danger(latitude,longitude):
+    danger_row = db.session.query(Danger).filter((Danger.latitude == latitude) & (Danger.longitude == longitude)).first()
+    if danger_row:
+        danger_row.is_delete = 'Y'
+        db.session.commit()
+    return response_json_with_code(result = 'success')
+    
