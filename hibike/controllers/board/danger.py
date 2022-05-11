@@ -184,7 +184,7 @@ def del_my_danger(user_id, latitude, longitude, my_latitude, my_longitude):
     user_row = db.session.query(User).filter(User.id == user_id).first()
     nickname = user_row.nickname
 
-    danger_row = db.session.query(Danger).filter((Danger.nickname == nickname) & (Danger.latitude == latitude) & (Danger.longitude == longitude)).first()
+    danger_row = db.session.query(Danger).filter((Danger.nickname == nickname) & (Danger.latitude == latitude) & (Danger.longitude == longitude) & (Danger.is_delete == 'N')).first()
     if danger_row: #본인이 등록한 경우
         danger_row.is_delete = 'Y'
         db.session.commit()
@@ -212,7 +212,7 @@ def del_my_danger(user_id, latitude, longitude, my_latitude, my_longitude):
             is_closer = True
         
         if is_closer or is_exist:
-            danger_row = db.session.query(Danger).filter((Danger.latitude == latitude) & (Danger.longitude == longitude)).first()
+            danger_row = db.session.query(Danger).filter((Danger.latitude == latitude) & (Danger.longitude == longitude) & (Danger.is_delete == 'N')).first()
             danger_row.is_delete = 'Y'
             db.session.commit()
             return response_json_with_code(200, result="success")
