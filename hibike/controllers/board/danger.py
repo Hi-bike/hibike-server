@@ -214,9 +214,9 @@ def del_my_danger(user_id, latitude, longitude, mylatitude, mylongitude):
         
         if is_closer or is_exist:
             return response_json_with_code(200, result="success")
-        elif is_closer:
+        elif not is_closer:
             return response_json_with_code(200, result="not_closer")
-        elif is_exist:
+        elif not is_exist:
             return response_json_with_code(200, result="not_exist")
         else:
             return response_json_with_code(401)
