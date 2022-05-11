@@ -262,4 +262,24 @@ def del_near_danger(latitude,longitude):
         danger_row.is_delete = 'Y'
         db.session.commit()
     return response_json_with_code(result = 'success')
-    
+
+@board_bp.route("/all-danger", methods=["GET"])
+@doc(
+    tags=[API_CATEGORY],
+    summary="모든 위험정보 반환",
+    description="모든 위험정보 반환",
+    responses={200: {"description" : "success response"},
+               401: {"description" : "Unauthorized"},
+    }
+)
+def all_danger():
+    danger_list = []
+    danger_row = db.session.query(Danger).all()
+    if danger_row == []:
+        return response_json_with_code(result = danger_list)
+    for row in danger_row:
+        tmp_list = []
+        tmp_list.append(row.latitude)
+        tmp_list.append(row.longitude)
+        danger_list.append(tmp_list)
+    return response_json_with_code(result = danger_list)
