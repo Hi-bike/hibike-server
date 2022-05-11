@@ -207,9 +207,10 @@ def del_my_danger(user_id, latitude, longitude, my_latitude, my_longitude):
         
         mark_location = (latitude, longitude)
         my_location = (my_latitude, my_longitude)
-
+        
+        logging.info(haversine(mark_location, my_location, unit = 'm'))
+        
         if haversine(mark_location, my_location, unit = 'm') <= 600.0:
-            logging.info(haversine(mark_location, my_location, unit = 'm'))
             is_closer = True
         
         if is_closer or is_exist:
