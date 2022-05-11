@@ -239,7 +239,9 @@ def get_my_danger(user_id, page):
         )
     i = 1
     for row in rows:
-        result[i]= row.to_dict()
+        temp_dict = row.to_dict()
+        temp_dict['is_delete'] = row.is_delete
+        result[i]= temp_dict
         i+=1
     return response_json_with_code(
         result=result,
