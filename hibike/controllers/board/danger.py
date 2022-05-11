@@ -214,12 +214,8 @@ def del_my_danger(user_id, latitude, longitude, mylatitude, mylongitude):
         
         if is_closer or is_exist:
             return response_json_with_code(200, result="success")
-        elif not is_closer:
-            return response_json_with_code(200, result="not_closer")
-        elif not is_exist:
-            return response_json_with_code(200, result="not_exist")
         else:
-            return response_json_with_code(401)
+            return response_json_with_code(200, result="fail")
                 
     
 @board_bp.route("/dimage/<filename>", methods=["GET"])
