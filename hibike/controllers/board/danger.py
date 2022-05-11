@@ -16,6 +16,7 @@ from hibike.schema.user import (
     RequestDangerRangeSchema,
     RequestDangerInformationSchema,
     RequestDeleteDanger,
+    RequestMyDanger
 )
 import  os
 from datetime import datetime
@@ -213,3 +214,33 @@ def ddonwload(filename):
     # if row:
     abspath = os.path.abspath(path)
     return send_from_directory(abspath, filename)
+
+
+@board_bp.route("/mydanger", methods=["POST"])
+@use_kwargs(RequestMyDanger)
+@doc(
+    tags=[API_CATEGORY],
+    summary="내가 등록한 위험요소",
+    description="내가 등록한 위험요소 5개 반환",
+    responses={200: {"description" : "success response"},
+               401: {"description" : "Unauthorized"},
+    }
+)
+def get_my_danger(user_id, page):
+    user_row = db.session.query(User).filter(User.id == user_id).first()
+    nickname = user_row.nickname
+    query = db.session.query(Danger).filter((Danger.nickname == nickname) & (Danger.is_delete == 'N')).order_by(Danger.time.desc()).slice((page - 1) * 5, page * 5)
+    rows = query.all()
+    result = {}
+    if rows == []:
+        return response_json_with_code(
+            is_last = "True"
+        )
+    i = 1
+    for row in rows:
+        result[i]= row.to_dict()
+        i+=1
+    return response_json_with_code(
+        result=result,
+        is_last = "False"
+    )

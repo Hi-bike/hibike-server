@@ -17,6 +17,19 @@ class Danger(db.Model):
     period = db.Column(db.Integer, default=15)
     id = db.Column(db.Integer, primary_key = True)
 
+    def to_dict(self):
+        return {
+        "id" : self.id,
+        "nickname" : self.nickname,
+        "region" : self.region,
+        "region_detail" : self.region_detail,
+        "image" : self.image,
+        "period" : self.period,
+        "time" : self.time,
+        "title" : self.title,
+        "contents" : self.contents,
+    }
+
 class Board(db.Model):
     __tablename__ = "board"
     __table_args__ = {"mysql_collate" : "utf8_bin"}

@@ -11,6 +11,7 @@ from hibike.controllers.board import (
 from hibike.schema.user import (
     RequestPostSchema,
     RequestReplySchema,
+    RequestMyPosts,
 )
 from hibike.utils.common import (
     response_json_with_code,
@@ -171,4 +172,33 @@ def get_reply_contents(reply_id):
     return response_json_with_code(
         contents = row.contents,
         nickname = row.nickname
+    )
+
+@board_bp.route("/myposts", methods=["POST"])
+@use_kwargs(RequestMyPosts)
+@doc(
+    tags=[API_CATEGORY],
+    summary="내가 작성한 게시글",
+    description="내가 작성한 게시글 5개 반환",
+    responses={200: {"description" : "success response"},
+               401: {"description" : "Unauthorized"},
+    }
+)
+def get_my_posts(user_id, page):
+    user_row = db.session.query(User).filter(User.id == user_id).first()
+    nickname = user_row.nickname
+    query = db.session.query(Board).filter(Board.nickname == nickname).order_by(Board.time.desc()).slice((page - 1) * 5, page * 5)
+    rows = query.all()
+    result = {}
+    if rows == []:
+        return response_json_with_code(
+            is_last = "True"
+        )
+    i = 1
+    for row in rows:
+        result[i]= row.to_dict()
+        i+=1
+    return response_json_with_code(
+        result=result,
+        is_last = "False"
     )
