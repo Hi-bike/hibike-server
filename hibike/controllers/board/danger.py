@@ -176,7 +176,13 @@ def get_danger_info(latitude, longitude):
                401: {"description" : "Unauthorized"},
     }
 )
-def del_my_danger(user_id, latitude, longitude, mylatitude, mylongitude):  
+def del_my_danger(user_id, latitude, longitude, mylatitude, mylongitude):
+    
+    latitude = float(latitude)
+    longitude = float(longitude)
+    mylatitude = float(mylatitude)
+    mylongitude = float(mylongitude)
+    
     user_row = db.session.query(User).filter(User.id == user_id).first()
     nickname = user_row.nickname
 
