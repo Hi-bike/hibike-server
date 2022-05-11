@@ -215,9 +215,9 @@ def del_my_danger(user_id, latitude, longitude, my_latitude, my_longitude):
             danger_row = db.session.query(Danger).filter((Danger.latitude == latitude) & (Danger.longitude == longitude)).first()
             danger_row.is_delete = 'Y'
             db.session.commit()
-            return response_json_with_code(200, result="success")
+            return response_json_with_code(200, result=str(haversine(mark_location, my_location, unit = 'm')))
         else:
-            return response_json_with_code(200, result="fail")
+            return response_json_with_code(200, result=str(haversine(mark_location, my_location, unit = 'm')))
                 
     
 @board_bp.route("/dimage/<filename>", methods=["GET"])
