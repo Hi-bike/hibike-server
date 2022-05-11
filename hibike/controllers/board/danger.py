@@ -230,7 +230,7 @@ def ddonwload(filename):
 def get_my_danger(user_id, page):
     user_row = db.session.query(User).filter(User.id == user_id).first()
     nickname = user_row.nickname
-    query = db.session.query(Danger).filter((Danger.nickname == nickname) & (Danger.is_delete == 'N')).order_by(Danger.time.desc()).slice((page - 1) * 5, page * 5)
+    query = db.session.query(Danger).filter(Danger.nickname == nickname).order_by(Danger.time.desc()).slice((page - 1) * 5, page * 5)
     rows = query.all()
     result = {}
     if rows == []:
