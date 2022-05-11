@@ -220,9 +220,7 @@ def del_my_danger(user_id, latitude, longitude, mylatitude, mylongitude):
             return response_json_with_code(200, result="not_exist")
         else:
             return response_json_with_code(401)
-        
-            
-    
+                
     
 @board_bp.route("/dimage/<filename>", methods=["GET"])
 @doc(
@@ -250,7 +248,7 @@ def ddonwload(filename):
 def get_my_danger(user_id, page):
     user_row = db.session.query(User).filter(User.id == user_id).first()
     nickname = user_row.nickname
-    query = db.session.query(Danger).filter((Danger.nickname == nickname) & (Danger.is_delete == 'N')).order_by(Danger.time.desc()).slice((page - 1) * 5, page * 5)
+    query = db.session.query(Danger).filter(Danger.nickname == nickname).order_by(Danger.time.desc()).slice((page - 1) * 5, page * 5)
     rows = query.all()
     result = {}
     if rows == []:
@@ -259,7 +257,9 @@ def get_my_danger(user_id, page):
         )
     i = 1
     for row in rows:
-        result[i]= row.to_dict()
+        temp_dict = row.to_dict()
+        temp_dict['is_delete'] = row.is_delete
+        result[i]= temp_dict
         i+=1
     return response_json_with_code(
         result=result,
@@ -284,3 +284,23 @@ def del_near_danger(latitude,longitude):
     return response_json_with_code(result = 'success')
 
 
+@board_bp.route("/all-danger", methods=["GET"])
+@doc(
+    tags=[API_CATEGORY],
+    summary="모든 위험정보 반환",
+    description="모든 위험정보 반환",
+    responses={200: {"description" : "success response"},
+               401: {"description" : "Unauthorized"},
+    }
+)
+def all_danger():
+    danger_list = []
+    danger_row = db.session.query(Danger).all()
+    if danger_row == []:
+        return response_json_with_code(result = danger_list)
+    for row in danger_row:
+        tmp_list = []
+        tmp_list.append(row.latitude)
+        tmp_list.append(row.longitude)
+        danger_list.append(tmp_list)
+    return response_json_with_code(result = danger_list)
