@@ -23,6 +23,7 @@ import  os
 from datetime import datetime
 import time as t
 from pytz import timezone
+from haversine import haversine
 
 path = os.path.abspath("./hibike/static/image/danger")
 
@@ -175,7 +176,7 @@ def get_danger_info(latitude, longitude):
                401: {"description" : "Unauthorized"},
     }
 )
-def del_my_danger(user_id,latitude,longitude):
+def del_my_danger(user_id, latitude, longitude, mylatitude, mylongitude):  
     user_row = db.session.query(User).filter(User.id == user_id).first()
     nickname = user_row.nickname
 
@@ -185,10 +186,11 @@ def del_my_danger(user_id,latitude,longitude):
         db.session.commit()
         return response_json_with_code(result = "success")
     else:
+        is_closer = False
+        is_exist = False
+        
         riding_row = db.session.query(RidingEach).filter(RidingEach.user_id == user_id).all()
-        if riding_row == []:
-            return response_json_with_code(401, result = "fail")
-        else:
+        if not riding_row == []:
             for row in riding_row:
                 tmp_latitude = []
                 tmp_longitude = []
@@ -197,11 +199,29 @@ def del_my_danger(user_id,latitude,longitude):
                 tmp_longitude.append(row.northeast_long)
                 tmp_longitude.append(row.southwest_long)
                 if (min(tmp_latitude) <= latitude) and (latitude <= max(tmp_latitude)) and (min(tmp_longitude) <= longitude) and (longitude <= max(tmp_longitude)):
-                    danger_row = danger_row = db.session.query(Danger).filter((Danger.latitude == latitude) & (Danger.longitude == longitude)).first()
+                    danger_row = db.session.query(Danger).filter((Danger.latitude == latitude) & (Danger.longitude == longitude)).first()
                     danger_row.is_delete = 'Y'
                     db.session.commit()
-                    return response_json_with_code(result = "success")
-            return response_json_with_code(401, result = "fail")
+                    is_exist = True
+            
+            # return response_json_with_code(401, result = "fail")
+        
+        mark_location = (latitude, longitude)
+        my_location = (mylatitude, mylongitude)
+
+        if haversine(mark_location, my_location, unit = 'm') <= 600.0:
+            is_closer = True
+        
+        if is_closer or is_exist:
+            return response_json_with_code(200, result="success")
+        elif is_closer:
+            return response_json_with_code(200, result="not_closer")
+        elif is_exist:
+            return response_json_with_code(200, result="not_exist")
+        else:
+            return response_json_with_code(401)
+        
+            
     
     
 @board_bp.route("/dimage/<filename>", methods=["GET"])
@@ -262,4 +282,5 @@ def del_near_danger(latitude,longitude):
         danger_row.is_delete = 'Y'
         db.session.commit()
     return response_json_with_code(result = 'success')
-    
+
+

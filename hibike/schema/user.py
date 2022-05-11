@@ -110,6 +110,8 @@ class RequestDeleteDanger(Schema):
       user_id = fields.Str(description="유저 id", required=True)
       latitude = fields.Float(description="위도", required=True)
       longitude = fields.Float(description="경도", required=True)
+      my_latitude = fields.Float(description="위도", required=True)
+      my_longitude = fields.Float(description="경도", required=True)
 
 class RequestMyPosts(Schema):
       user_id = fields.Str(description="유저 id", required=True)
