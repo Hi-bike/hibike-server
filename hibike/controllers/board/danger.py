@@ -176,12 +176,12 @@ def get_danger_info(latitude, longitude):
                401: {"description" : "Unauthorized"},
     }
 )
-def del_my_danger(user_id, latitude, longitude, mylatitude, mylongitude):
+def del_my_danger(user_id, latitude, longitude, my_latitude, my_longitude):
     
     latitude = float(latitude)
     longitude = float(longitude)
-    mylatitude = float(mylatitude)
-    mylongitude = float(mylongitude)
+    my_latitude = float(my_latitude)
+    my_longitude = float(my_longitude)
     
     user_row = db.session.query(User).filter(User.id == user_id).first()
     nickname = user_row.nickname
@@ -213,7 +213,7 @@ def del_my_danger(user_id, latitude, longitude, mylatitude, mylongitude):
             # return response_json_with_code(401, result = "fail")
         
         mark_location = (latitude, longitude)
-        my_location = (mylatitude, mylongitude)
+        my_location = (my_latitude, my_longitude)
 
         if haversine(mark_location, my_location, unit = 'm') <= 600.0:
             is_closer = True
