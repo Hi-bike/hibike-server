@@ -149,6 +149,9 @@ def get_danger_info(latitude, longitude):
             401,
             result = "no data"
         )
+    if danger_row.is_delete == "Y":
+        return response_json_with_code(401)
+    
     res = {
         "nickname" : danger_row.nickname,
         "title" : danger_row.title,
@@ -199,20 +202,19 @@ def del_my_danger(user_id, latitude, longitude, my_latitude, my_longitude):
                 tmp_longitude.append(row.northeast_long)
                 tmp_longitude.append(row.southwest_long)
                 if (min(tmp_latitude) <= latitude) and (latitude <= max(tmp_latitude)) and (min(tmp_longitude) <= longitude) and (longitude <= max(tmp_longitude)):
-                    danger_row = db.session.query(Danger).filter((Danger.latitude == latitude) & (Danger.longitude == longitude)).first()
-                    danger_row.is_delete = 'Y'
-                    db.session.commit()
                     is_exist = True
-            
-            # return response_json_with_code(401, result = "fail")
         
         mark_location = (latitude, longitude)
         my_location = (my_latitude, my_longitude)
 
         if haversine(mark_location, my_location, unit = 'm') <= 600.0:
+            print(haversine(mark_location, my_location, unit = 'm'))
             is_closer = True
         
         if is_closer or is_exist:
+            danger_row = db.session.query(Danger).filter((Danger.latitude == latitude) & (Danger.longitude == longitude)).first()
+            danger_row.is_delete = 'Y'
+            db.session.commit()
             return response_json_with_code(200, result="success")
         else:
             return response_json_with_code(200, result="fail")
