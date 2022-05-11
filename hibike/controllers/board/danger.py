@@ -24,6 +24,7 @@ from datetime import datetime
 import time as t
 from pytz import timezone
 from haversine import haversine
+import logging
 
 path = os.path.abspath("./hibike/static/image/danger")
 
@@ -208,7 +209,7 @@ def del_my_danger(user_id, latitude, longitude, my_latitude, my_longitude):
         my_location = (my_latitude, my_longitude)
 
         if haversine(mark_location, my_location, unit = 'm') <= 600.0:
-            print(haversine(mark_location, my_location, unit = 'm'))
+            logging.info(haversine(mark_location, my_location, unit = 'm'))
             is_closer = True
         
         if is_closer or is_exist:
