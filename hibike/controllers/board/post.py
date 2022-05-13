@@ -187,7 +187,7 @@ def get_reply_contents(reply_id):
 def get_my_posts(user_id, page):
     user_row = db.session.query(User).filter(User.id == user_id).first()
     nickname = user_row.nickname
-    query = db.session.query(Board).filter(Board.nickname == nickname).order_by(Board.time.desc()).slice((page - 1) * 5, page * 5)
+    query = db.session.query(Board).filter(Board.nickname == nickname).order_by(Board.time.desc()).slice((page - 1) * 10, page * 10)
     rows = query.all()
     result = {}
     if rows == []:
