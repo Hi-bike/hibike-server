@@ -174,8 +174,7 @@ def get_reply_contents(reply_id):
         nickname = row.nickname
     )
 
-@board_bp.route("/myposts", methods=["POST"])
-@use_kwargs(RequestMyPosts)
+@board_bp.route("/myposts/<user_id>/<int:page>", methods=["GET"])
 @doc(
     tags=[API_CATEGORY],
     summary="내가 작성한 게시글",
@@ -186,19 +185,27 @@ def get_reply_contents(reply_id):
 )
 def get_my_posts(user_id, page):
     user_row = db.session.query(User).filter(User.id == user_id).first()
+    
     nickname = user_row.nickname
-    query = db.session.query(Board).filter(Board.nickname == nickname).order_by(Board.time.desc()).slice((page - 1) * 10, page * 10)
-    rows = query.all()
-    result = {}
+    
+    rows = db.session.query(Board)\
+            .filter(Board.nickname==nickname)\
+            .order_by(Board.time.desc())\
+            .slice(page, page+15)\
+            .all()
+    
+    result = []
     if rows == []:
         return response_json_with_code(
-            is_last = "True"
+            result=result,
         )
-    i = 1
+        
     for row in rows:
-        result[i]= row.to_dict()
-        i+=1
-    return response_json_with_code(
-        result=result,
-        is_last = "False"
-    )
+        result.append({
+            "nickname" : row.nickname,
+            "title" : row.title,
+            "time" : row.time,
+            "board_id" : row.id
+        })
+            
+    return response_json_with_code(result=result)

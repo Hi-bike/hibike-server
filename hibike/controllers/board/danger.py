@@ -233,8 +233,7 @@ def ddonwload(filename):
     return send_from_directory(abspath, filename)
 
 
-@board_bp.route("/mydanger", methods=["POST"])
-@use_kwargs(RequestMyDanger)
+@board_bp.route("/mydanger/<user_id>/<int:page>", methods=["GET"])
 @doc(
     tags=[API_CATEGORY],
     summary="내가 등록한 위험요소",
@@ -245,24 +244,34 @@ def ddonwload(filename):
 )
 def get_my_danger(user_id, page):
     user_row = db.session.query(User).filter(User.id == user_id).first()
+    
     nickname = user_row.nickname
-    query = db.session.query(Danger).filter(Danger.nickname == nickname).order_by(Danger.time.desc()).slice((page - 1) * 5, page * 5)
-    rows = query.all()
-    result = {}
+    
+    rows = db.session.query(Danger)\
+            .filter(Danger.nickname==nickname)\
+            .order_by(Danger.time.desc())\
+            .slice(page, page+15)\
+            .all()
+    
+    result = []
     if rows == []:
         return response_json_with_code(
-            is_last = "True"
+            result=result,
         )
-    i = 1
+        
     for row in rows:
-        temp_dict = row.to_dict()
-        temp_dict['is_delete'] = row.is_delete
-        result[i]= temp_dict
-        i+=1
-    return response_json_with_code(
-        result=result,
-        is_last = "False"
-    )
+        result.append({
+            "nickname" : row.nickname,
+            "title" : row.title,
+            "time" : row.time,
+            "is_delete" : row.is_delete,
+            "region" : row.region,
+            "region_detail" : row.region_detail,
+            "danger_id" : row.id
+        })
+            
+    return response_json_with_code(result=result)
+    
 
 @board_bp.route("/delete-near-danger", methods=["POST"])
 @use_kwargs(RequestDeleteNearDanger)
