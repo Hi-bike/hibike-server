@@ -244,6 +244,9 @@ def ddonwload(filename):
 )
 def get_my_danger(user_id, page):
     user_row = db.session.query(User).filter(User.id == user_id).first()
+    count = -1
+    if page == 0:
+        count = db.session.query(Danger).filter(Danger.nickname==user_row.nickname).count()
     
     nickname = user_row.nickname
     
@@ -267,7 +270,8 @@ def get_my_danger(user_id, page):
             "is_delete" : row.is_delete,
             "region" : row.region,
             "region_detail" : row.region_detail,
-            "danger_id" : row.id
+            "danger_id" : row.id,
+            "count":count
         })
             
     return response_json_with_code(result=result)

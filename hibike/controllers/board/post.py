@@ -185,7 +185,10 @@ def get_reply_contents(reply_id):
 )
 def get_my_posts(user_id, page):
     user_row = db.session.query(User).filter(User.id == user_id).first()
-    
+    count = -1
+    if page == 0:
+        count = db.session.query(Board).filter(Board.nickname==user_row.nickname).count()
+        
     nickname = user_row.nickname
     
     rows = db.session.query(Board)\
@@ -205,7 +208,8 @@ def get_my_posts(user_id, page):
             "nickname" : row.nickname,
             "title" : row.title,
             "time" : row.time,
-            "board_id" : row.id
+            "board_id" : row.id,
+            "count":count
         })
             
     return response_json_with_code(result=result)
