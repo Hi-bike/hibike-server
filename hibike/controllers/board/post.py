@@ -208,6 +208,7 @@ def get_my_posts(user_id, page):
         result.append({
             "nickname" : row.nickname,
             "title" : row.title,
+            "contents":row.contents,
             "time" : row.time,
             "board_id" : row.id,
             "count":count
