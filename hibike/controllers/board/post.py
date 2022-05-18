@@ -9,6 +9,7 @@ from hibike.controllers.board import (
     board_bp
 )
 from hibike.schema.user import (
+    RequestDeleteMyPost,
     RequestPostSchema,
     RequestReplySchema,
     RequestMyPosts,
@@ -216,7 +217,7 @@ def get_my_posts(user_id, page):
 
 
 @board_bp.route("delete-mypost", methods=["POST"])
-@use_kwargs(RequestReplySchema)
+@use_kwargs(RequestDeleteMyPost)
 def delete_mypost(post_id):
     Board.query.filter(Board.id==post_id).delete()
     db.session.commit()
