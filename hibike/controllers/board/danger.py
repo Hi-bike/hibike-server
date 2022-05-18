@@ -329,3 +329,21 @@ def shift_mydanger(danger_id):
     db.session.commit()
     
     return response_json_with_code(result="success")
+
+
+@board_bp.route("/mydanger/<int:danger_id>", methods=["GET"])
+def get_my_danger_one(danger_id):
+    row = Danger.query.filter(Danger.id==danger_id).one_or_none()
+    
+    result = {
+        "title":row.title,
+        "contents":row.contents,
+        "time":row.time,
+        "is_delete":row.is_delete,
+        "image":row.image,
+        "region":row.region,
+        "region_detail":row.region_detail,
+        "period":row.period
+    }
+    
+    return response_json_with_code(result=result)
