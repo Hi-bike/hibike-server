@@ -127,3 +127,6 @@ class RequestDeleteNearDanger(Schema):
       
 class RequestDeleteMyPost(Schema):
       post_id = fields.Int(description="포스트 id", requird=True)
+      
+class RequestDeleteMyDanger(Schema):
+      danger_id = fields.Int(description="위험요소 id", requird=True)

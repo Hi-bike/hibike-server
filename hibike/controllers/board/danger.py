@@ -17,7 +17,8 @@ from hibike.schema.user import (
     RequestDangerInformationSchema,
     RequestDeleteDanger,
     RequestMyDanger,
-    RequestDeleteNearDanger
+    RequestDeleteNearDanger,
+    RequestDeleteMyDanger
 )
 import  os
 from datetime import datetime
@@ -315,3 +316,16 @@ def all_danger():
         tmp_list.append(row.longitude)
         danger_list.append(tmp_list)
     return response_json_with_code(result = danger_list)
+
+@board_bp.route("/shift-mydanger", methods=["POST"])
+@use_kwargs(RequestDeleteMyDanger)
+def delete_mypost(danger_id):
+    row = Danger.query.filter(Danger.id == danger_id).one_or_none()
+    if row.is_delete == "N":
+        row.is_deleted = "Y"
+    else:
+        row.is_deleted = "N"
+        
+    db.session.commit()
+    
+    return response_json_with_code(result="success")
