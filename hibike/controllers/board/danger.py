@@ -319,7 +319,7 @@ def all_danger():
 
 @board_bp.route("/shift-mydanger", methods=["POST"])
 @use_kwargs(RequestDeleteMyDanger)
-def delete_mypost(danger_id):
+def shift_mydanger(danger_id):
     row = Danger.query.filter(Danger.id == danger_id).one_or_none()
     if row.is_delete == "N":
         row.is_deleted = "Y"
