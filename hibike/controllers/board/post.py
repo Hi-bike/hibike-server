@@ -213,3 +213,12 @@ def get_my_posts(user_id, page):
         })
             
     return response_json_with_code(result=result)
+
+
+@board_bp.route("delete-mypost", methods=["POST"])
+@use_kwargs(RequestReplySchema)
+def delete_mypost(post_id):
+    Board.query.filter(Board.id==post_id).delete()
+    db.session.commit()
+    
+    return response_json_with_code(result="success")

@@ -124,3 +124,6 @@ class RequestMyDanger(Schema):
 class RequestDeleteNearDanger(Schema):
       latitude = fields.Float(description="위도", required=True)
       longitude = fields.Float(description="경도", required=True)
+      
+class RequestDeleteMyPost(Schema):
+      post_id = fields.Int(description="포스트 id", requird=True)
