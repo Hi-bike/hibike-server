@@ -322,9 +322,9 @@ def all_danger():
 def shift_mydanger(danger_id):
     row = Danger.query.filter(Danger.id == danger_id).one_or_none()
     if row.is_delete == "N":
-        row.is_deleted = "Y"
+        row.is_delete = "Y"
     else:
-        row.is_deleted = "N"
+        row.is_delete = "N"
         
     db.session.commit()
     
