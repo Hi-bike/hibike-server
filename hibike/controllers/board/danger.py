@@ -333,7 +333,7 @@ def shift_mydanger(danger_id):
     return response_json_with_code(result="success")
 
 
-@board_bp.route("/mydanger/<int:danger_id>", methods=["GET"])
+@board_bp.route("/danger/<int:danger_id>", methods=["GET"])
 def get_my_danger_one(danger_id):
     row = Danger.query.filter(Danger.id==danger_id).one_or_none()
     
