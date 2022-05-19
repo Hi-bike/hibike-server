@@ -345,7 +345,8 @@ def get_my_danger_one(danger_id):
         "image":row.image,
         "region":row.region,
         "region_detail":row.region_detail,
-        "period":row.period
+        "period":row.period,
+        "nickname":row.nickname
     }
     
     return response_json_with_code(result=result)
