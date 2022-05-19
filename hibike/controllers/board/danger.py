@@ -315,7 +315,7 @@ def all_danger():
         tmp_list.append(row.latitude)
         tmp_list.append(row.longitude)
         tmp_list.append(row.id)
-        danger_list.append(tmp_list)
+        danger_list.append(float(tmp_list))
         
     return response_json_with_code(result = danger_list)
 
