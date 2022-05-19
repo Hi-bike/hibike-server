@@ -314,7 +314,9 @@ def all_danger():
         tmp_list = []
         tmp_list.append(row.latitude)
         tmp_list.append(row.longitude)
+        tmp_list.append(row.id)
         danger_list.append(tmp_list)
+        
     return response_json_with_code(result = danger_list)
 
 @board_bp.route("/shift-mydanger", methods=["POST"])
