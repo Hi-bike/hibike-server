@@ -311,12 +311,13 @@ def all_danger():
     if danger_row == []:
         return response_json_with_code(result = danger_list)
     for row in danger_row:
-        tmp_list = []
-        tmp_list.append(row.latitude)
-        tmp_list.append(row.longitude)
-        tmp_list.append(float(row.id))
-        danger_list.append(tmp_list)
-        
+        if row.is_delete == 'N':
+            tmp_list = []
+            tmp_list.append(row.latitude)
+            tmp_list.append(row.longitude)
+            tmp_list.append(float(row.id))
+            danger_list.append(tmp_list)
+            
     return response_json_with_code(result = danger_list)
 
 @board_bp.route("/shift-mydanger", methods=["POST"])
