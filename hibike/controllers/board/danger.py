@@ -46,7 +46,7 @@ def get_danger(danger_range):
     db_longitude = []
     count_list = []
     tmp_danger_list = []
-    danger_ids = []
+    
     danger_row = db.session.query(Danger).filter(Danger.is_delete == 'N').all()
     if danger_row == []:
         return response_json_with_code(
@@ -55,7 +55,6 @@ def get_danger(danger_range):
     for row in danger_row:
         db_latitude.append(row.latitude)
         db_longitude.append(row.longitude)
-        danger_ids.append(row.id)
     
     for i in range(len(range_list)):
         latitude_list = []
@@ -72,7 +71,6 @@ def get_danger(danger_range):
                 if db_latitude[j] not in tmp_danger_list and db_longitude[j] not in tmp_danger_list:
                     tmp_danger_list.append(db_latitude[j])
                     tmp_danger_list.append(db_longitude[j])
-                    tmp_danger_list.append(danger_ids[j])
                     count += 1
                     
         count_list.append(count)
