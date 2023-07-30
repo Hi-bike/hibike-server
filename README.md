@@ -9,23 +9,16 @@
 
 # 프로젝트 구조
 ```
-scrimdor-server/
+hibike-server/
     __init__.py
     app.py              # App Config 및 API Endpoint 라우팅
-    scrimdor/
+    hibike/
          controllers/     # API Endpoint 라우팅
             __init__.py
-            board/
-               __init__.py
-               post.py
-               reply.py 
-            auth/
-               __init__.py
-               user.py
+            {domain}/
          models/           # API별 로직 구현
             __init__.py
-            auth.py 
-            board.py
+            {model}/
          schema/           # API별 입출력 스키마 정의
 ```
 
@@ -39,7 +32,7 @@ Docker 컨테이너 속에서
 ```
 docker exec -it mysql /bin/bash
 mysql -u root -p
-create database scrimdor;
+create database hibike;
 ```
 로컬 터미널에서
 ```
@@ -56,7 +49,7 @@ http://127.0.0.1/docs/
 
 * 프로젝트 Clone
 ```
-git clone https://github.com/ScrimdorTest/scrimdor-server.git
+git clone https://github.com/Hi-bike/hibike-server.git
 ```
 
 * MariaDB (10.6 stable) 다운로드 및 설치
